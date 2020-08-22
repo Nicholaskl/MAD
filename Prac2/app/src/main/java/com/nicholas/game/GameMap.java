@@ -6,14 +6,30 @@ public class GameMap {
     private Area[][] grid = new Area[numRow][numCol];
 
     public GameMap() {
+        Food pancakes = new Food("Yummy", 15, 10.0);
+        Food pizza = new Food("Filling", 40, 30.0);
+        Food cabonara = new Food("Experimental Cabonara", 120, 4.0);
+
+        Equipment iphone = new Equipment("Apple", 100, 5.0);
+        Equipment jadeMonk = new Equipment("Jade Monkey", 120, 5.0);
+        Equipment roadmap = new Equipment("Road Map", 75, 2.0);
+        Equipment iceScrap = new Equipment("Ice Scraper", 50, 3.0);
+
         grid[0][0] = new Area(false);
+        grid[0][0].addItem(roadmap);
         grid[0][1] = new Area(true);
+        grid[0][1].addItem(pizza);
         grid[0][2] = new Area(true);
+        grid[0][2].addItem(jadeMonk);
         grid[1][0] = new Area(false);
         grid[1][1] = new Area(false);
+        grid[1][1].addItem(iphone);
+        grid[1][1].addItem(pancakes);
         grid[1][2] = new Area(true);
+        grid[1][2].addItem(cabonara);
         grid[2][0] = new Area(true);
         grid[2][1] = new Area(true);
+        grid[2][1].addItem(iceScrap);
         grid[2][2] = new Area(false);
     }
 

@@ -2,14 +2,19 @@ package com.nicholas.game;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class NavigationActivity extends AppCompatActivity {
-    private Button east, west, north, south, options;
+    private static final String PLAYER = "com.nicholas.game.player";
+    private Button east, west, north, south, options, reset;
     private TextView areaName, currLocation, cashText, healthText, weightText;
     private Player player;
     private GameMap map;
@@ -24,6 +29,7 @@ public class NavigationActivity extends AppCompatActivity {
         north = findViewById(R.id.northButton);
         south = findViewById(R.id.southButton);
         options = findViewById(R.id.optionsButton);
+        reset = findViewById(R.id.resetButton);
 
         areaName = findViewById(R.id.areaName);
         currLocation = findViewById(R.id.currLocation);
@@ -31,9 +37,7 @@ public class NavigationActivity extends AppCompatActivity {
         healthText = findViewById(R.id.healthText);
         weightText = findViewById(R.id.weightText);
 
-        player = new Player(1, 1, 0, 100);
-        map = new GameMap();
-        updateAreaText();
+        startGame();
 
 
         east.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +71,30 @@ public class NavigationActivity extends AppCompatActivity {
                 buttonPress(north, south);
             }
         });
+
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startGame();
+            }
+        });
+
+        options.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(MarketActivity.getIntent(NavigationActivity.this, player));
+            }
+        });
+    }
+
+    public void startGame(){
+        player = new Player(1, 1, 0, 100);
+        map = new GameMap();
+        updateAreaText();
+        startButton(north);
+        startButton(south);
+        startButton(east);
+        startButton(west);
     }
 
     public void buttonPress(Button direction, Button opposite){
@@ -74,8 +102,7 @@ public class NavigationActivity extends AppCompatActivity {
         updateAreaText();
         if (!opposite.isClickable())
         {
-            opposite.setClickable(true);
-            opposite.setTextColor(Color.parseColor("#000000"));
+            startButton(opposite);
         }
 
         if(player.getColLocation() == 0)
@@ -110,6 +137,11 @@ public class NavigationActivity extends AppCompatActivity {
         btn.setTextColor(Color.parseColor("#808080"));
     }
 
+    public void startButton(Button btn) {
+        btn.setClickable(true);
+        btn.setTextColor(Color.parseColor("#000000"));
+    }
+
     public void updateAreaText(){
         String location = player.getRowLocation() + ", " + player.getColLocation();
         String health = player.getHealth() + " hp";
@@ -125,5 +157,12 @@ public class NavigationActivity extends AppCompatActivity {
             areaName.setText("Town");
         else
             areaName.setText("Wilderness");
+    }
+
+    public Intent getIntent(Context c, int cash, double health, double equipmentMass,
+                                   Object equipment){
+        Intent intent = new Intent(c, MarketActivity.class);
+        intent.putExtra(PLAYER, player);
+        return intent;
     }
 }
