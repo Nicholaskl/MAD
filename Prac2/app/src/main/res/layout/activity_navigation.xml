@@ -8,8 +8,9 @@
 
     <Button
         android:id="@+id/westButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="32dp"
         android:password="false"
         android:text="West"
         app:layout_constraintBottom_toTopOf="@+id/southButton"
@@ -18,8 +19,9 @@
 
     <Button
         android:id="@+id/eastButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="32dp"
         android:password="false"
         android:text="East"
         app:layout_constraintBottom_toTopOf="@+id/southButton"
@@ -28,8 +30,8 @@
 
     <Button
         android:id="@+id/southButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="48dp"
         android:password="false"
         android:text="South"
@@ -39,8 +41,8 @@
 
     <Button
         android:id="@+id/northButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
         android:password="false"
         android:text="North"
         app:layout_constraintBottom_toTopOf="@+id/westButton"
@@ -63,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:background="#D6D6D6"
-        android:text="Button"
+        android:text="Options"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/areaName" />

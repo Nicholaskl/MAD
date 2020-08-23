@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 public class NavigationActivity extends AppCompatActivity {
     private static final String PLAYER = "com.nicholas.game.player";
+    private static final int REQUEST_CODE_PLAY = 0;
+
     private Button east, west, north, south, options, reset;
     private TextView areaName, currLocation, cashText, healthText, weightText;
     private Player player;
@@ -82,13 +84,14 @@ public class NavigationActivity extends AppCompatActivity {
         options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(MarketActivity.getIntent(NavigationActivity.this, player));
+                Intent intent = MarketActivity.getIntent(NavigationActivity.this, player);
+                startActivityForResult(intent, REQUEST_CODE_PLAY);
             }
         });
     }
 
     public void startGame(){
-        player = new Player(1, 1, 0, 100);
+        player = new Player(1, 1, 100, 100);
         map = new GameMap();
         updateAreaText();
         startButton(north);

@@ -53,6 +53,8 @@ public class Player implements Parcelable {
         return equipmentMass;
     }
 
+    public List<Equipment> getEquipment() { return equipment; }
+
     public void setRowLocation(int rowLocation) {
         this.rowLocation = rowLocation;
     }

@@ -6,11 +6,11 @@ public class GameMap {
     private Area[][] grid = new Area[numRow][numCol];
 
     public GameMap() {
-        Food pancakes = new Food("Yummy", 15, 10.0);
-        Food pizza = new Food("Filling", 40, 30.0);
+        Food pancakes = new Food("Pancakes", 15, 10.0);
+        Food pizza = new Food("Pizza", 40, 30.0);
         Food cabonara = new Food("Experimental Cabonara", 120, 4.0);
 
-        Equipment iphone = new Equipment("Apple", 100, 5.0);
+        Equipment iphone = new Equipment("iPhone X", 100, 5.0);
         Equipment jadeMonk = new Equipment("Jade Monkey", 120, 5.0);
         Equipment roadmap = new Equipment("Road Map", 75, 2.0);
         Equipment iceScrap = new Equipment("Ice Scraper", 50, 3.0);
