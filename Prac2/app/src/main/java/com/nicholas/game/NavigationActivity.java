@@ -1,5 +1,7 @@
 package com.nicholas.game;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -7,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcel;
+import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -84,14 +87,38 @@ public class NavigationActivity extends AppCompatActivity {
         options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = MarketActivity.getIntent(NavigationActivity.this, player);
-                startActivityForResult(intent, REQUEST_CODE_PLAY);
+                if (map.getArea(player.getRowLocation(), player.getColLocation()).isTown())
+                {
+                    Intent intent = MarketActivity.getIntent(NavigationActivity.this, player);
+                    startActivityForResult(intent, REQUEST_CODE_PLAY);
+                }
+                else
+                {
+                    Intent intent = WildernessActivity.getIntent(NavigationActivity.this, player);
+                    startActivityForResult(intent, REQUEST_CODE_PLAY);
+                }
             }
         });
+
+        if (savedInstanceState != null) {
+            player = savedInstanceState.getParcelable(PLAYER);
+            updateAreaText();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent returnData) {
+        super.onActivityResult(requestCode, resultCode, returnData);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_PLAY) {
+            player = MarketActivity.getPlayer(returnData);
+            updateAreaText();
+            if(player.getCash() == 9999) gameWin();
+        }
     }
 
     public void startGame(){
         player = new Player(1, 1, 100, 100);
+        player.addEquipment(new Equipment("Golden Ring", 110, 2.0));
         map = new GameMap();
         updateAreaText();
         startButton(north);
@@ -112,15 +139,15 @@ public class NavigationActivity extends AppCompatActivity {
         {
             stopButton(north);
         }
-        else if (player.getColLocation() == map.getCol() - 1)
+        if (player.getColLocation() == map.getCol() - 1)
         {
             stopButton(south);
         }
-        else if(player.getRowLocation() == 0)
+        if(player.getRowLocation() == 0)
         {
             stopButton(west);
         }
-        else if (player.getRowLocation() == map.getRow() - 1)
+        if (player.getRowLocation() == map.getRow() - 1)
         {
             stopButton(east);
         }
@@ -131,6 +158,7 @@ public class NavigationActivity extends AppCompatActivity {
             stopButton(south);
             stopButton(east);
             stopButton(west);
+            stopButton(options);
             areaName.setText("Game Over!");
         }
     }
@@ -162,10 +190,32 @@ public class NavigationActivity extends AppCompatActivity {
             areaName.setText("Wilderness");
     }
 
+    public void gameWin(){
+        stopButton(north);
+        stopButton(south);
+        stopButton(east);
+        stopButton(west);
+        stopButton(options);
+
+        areaName.setText("GAME WON!");
+    }
+
     public Intent getIntent(Context c, int cash, double health, double equipmentMass,
                                    Object equipment){
         Intent intent = new Intent(c, MarketActivity.class);
         intent.putExtra(PLAYER, player);
         return intent;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable(PLAYER, player);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }

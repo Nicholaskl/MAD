@@ -96,7 +96,7 @@ public class Player implements Parcelable {
         this.cash = in.readInt();
         this.health = in.readDouble();
         this.equipmentMass = in.readDouble();
-        this.equipment = in.readArrayList(null);
+        in.readTypedList(equipment, Equipment.CREATOR);
     }
 
     @Override
@@ -111,6 +111,6 @@ public class Player implements Parcelable {
         dest.writeInt(this.cash);
         dest.writeDouble(this.health);
         dest.writeDouble(this.equipmentMass);
-        dest.writeList(this.equipment);
+        dest.writeTypedList(this.equipment);
     }
 }

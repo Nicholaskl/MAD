@@ -10,9 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.List;
-
-public class MarketActivity extends AppCompatActivity {
+public class WildernessActivity extends AppCompatActivity {
     private TextView cash, health, weight;
     private Player player;
     private Area area;
@@ -23,7 +21,7 @@ public class MarketActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_market);
+        setContentView(R.layout.activity_wilderness);
         Bundle data = getIntent().getExtras();
         player = (Player) data.getParcelable(PLAYER);
         area = (new GameMap().getArea(player.getRowLocation(), player.getColLocation()));
@@ -117,7 +115,7 @@ public class MarketActivity extends AppCompatActivity {
     }
 
     public static Intent getIntent(Context c, Player player){
-        Intent intent = new Intent(c, MarketActivity.class);
+        Intent intent = new Intent(c, WildernessActivity.class);
         intent.putExtra(PLAYER, player);
         return intent;
     }
@@ -144,12 +142,12 @@ public class MarketActivity extends AppCompatActivity {
 
         if(area.getItems().size() != 0)
         {
-            String output = area.getItems().get(0).getDescription() + ": $" + area.getItems().get(0).getValue();
+            String output = area.getItems().get(0).getDescription();
             buy1.setText(output);
             startButton(buyButton1);
             if(area.getItems().size() > 1)
             {
-                String output2 = area.getItems().get(1).getDescription() + ": $" + area.getItems().get(1).getValue();
+                String output2 = area.getItems().get(1).getDescription();
                 buy2.setText(output2);
                 startButton(buyButton2);
             }
@@ -171,7 +169,7 @@ public class MarketActivity extends AppCompatActivity {
         for(int i=0; i < 4; i++) {
             if(i < player.getEquipment().size())
             {
-                String output = player.getEquipment().get(i).getDescription() + ": $" + player.getEquipment().get(i).getValue();
+                String output = player.getEquipment().get(i).getDescription();
                 sell[i].setText(output);
                 startButton(sellButton[i]);
             }
@@ -181,15 +179,13 @@ public class MarketActivity extends AppCompatActivity {
     }
 
     public void buyButton(Button btn, Item item) {
-        if((player.getCash() >= item.getValue()) && (item instanceof Equipment)) {
+        if(item instanceof Equipment) {
             player.addEquipment((Equipment)item);
-            player.setCash(player.getCash() - item.getValue());
             checkWin();
             printStatus();
             stopButton(btn);
         }
-        else if((player.getCash() >= item.getValue()) && (item instanceof Food)) {
-            player.setCash(player.getCash() - item.getValue());
+        else {
             player.setHealth(Math.min(player.getHealth() + item.getValue(), 100.0));
             printStatus();
             stopButton(btn);
@@ -198,7 +194,6 @@ public class MarketActivity extends AppCompatActivity {
     }
 
     public void sellButton(Button btn, Item item) {
-        player.setCash(player.getCash() + item.getValue());
         player.removeEquipment((Equipment)item);
         stopButton(btn);
         printStatus();

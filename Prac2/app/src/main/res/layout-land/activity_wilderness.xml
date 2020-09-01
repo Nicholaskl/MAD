@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WildernessActivity">
+
+    <Button
+        android:id="@+id/sellButton4"
+        android:layout_width="65dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:text="Drop"
+        app:layout_constraintStart_toStartOf="@+id/sellButton1"
+        app:layout_constraintTop_toBottomOf="@+id/sellButton3" />
+
+    <Button
+        android:id="@+id/sellButton3"
+        android:layout_width="65dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:text="Drop"
+        app:layout_constraintStart_toStartOf="@+id/sellButton1"
+        app:layout_constraintTop_toBottomOf="@+id/sellButton2" />
+
+    <TextView
+        android:id="@+id/sellText4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/sellText1"
+        app:layout_constraintTop_toTopOf="@+id/sellButton4" />
+
+    <TextView
+        android:id="@+id/sellText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/sellText1"
+        app:layout_constraintTop_toTopOf="@+id/sellButton3" />
+
+    <Button
+        android:id="@+id/sellButton2"
+        android:layout_width="65dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:text="Drop"
+        app:layout_constraintStart_toStartOf="@+id/sellButton1"
+        app:layout_constraintTop_toBottomOf="@+id/sellButton1" />
+
+    <Button
+        android:id="@+id/sellButton1"
+        android:layout_width="65dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="48dp"
+        android:text="Drop"
+        app:layout_constraintBottom_toTopOf="@+id/sellButton2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/sellText1"
+        app:layout_constraintTop_toBottomOf="@+id/buyButton2" />
+
+    <TextView
+        android:id="@+id/sellText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/sellText1"
+        app:layout_constraintTop_toTopOf="@+id/sellButton2" />
+
+    <TextView
+        android:id="@+id/sellText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toStartOf="@+id/sellButton1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sellButton1" />
+
+    <Button
+        android:id="@+id/buyButton2"
+        android:layout_width="85dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:text="Pick Up"
+        app:layout_constraintStart_toStartOf="@+id/buyButton1"
+        app:layout_constraintTop_toBottomOf="@+id/buyButton1" />
+
+    <TextView
+        android:id="@+id/buyText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/buyText1"
+        app:layout_constraintTop_toTopOf="@+id/buyButton2" />
+
+    <Button
+        android:id="@+id/leaveButton"
+        android:layout_width="75dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:text="Leave"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cashText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/healthText"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/healthText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/weightText"
+        app:layout_constraintStart_toEndOf="@+id/cashText" />
+
+    <TextView
+        android:id="@+id/weightText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/healthText" />
+
+    <TextView
+        android:id="@+id/buyText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toStartOf="@+id/buyButton1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/buyButton1" />
+
+    <Button
+        android:id="@+id/buyButton1"
+        android:layout_width="85dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="48dp"
+        android:text="Pick Up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buyText1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
