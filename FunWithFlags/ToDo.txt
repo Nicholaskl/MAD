@@ -1,0 +1,4 @@
+Add hash maps instead of big if-else statements :)
+
+Integer for answers to question instead of one for points and penalty... that way can just "add" the value to current score and check win after
+Should have new activity for the last one i think...
