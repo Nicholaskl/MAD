@@ -25,17 +25,19 @@ public class FlagSelector extends Fragment {
     private FlagAdapter adapter;
     private GridLayoutManager rvLayout;
     private int cols, colOrient, tmp;
+    private GameData gData;
     private static final String COLNUM = "com.nicholas.funwithflags.colnum";
     private static final String COLORIENT = "com.nicholas.funwithflags.colorientation";
     private static final String FLAG = "com.nicholas.funwithflags.flag";
+    private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_flag_selector, container, false);
-
         Bundle bundle = getArguments();
+        gData = bundle.getParcelable(GAMEDATA);
         cols = bundle.getInt(COLNUM);
         tmp = bundle.getInt(COLORIENT);
 
@@ -70,8 +72,11 @@ public class FlagSelector extends Fragment {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    PointDisplayButton button = new PointDisplayButton();
                     QuesSelector newFragment = new QuesSelector();
                     Bundle curr = new Bundle();
+                    curr.putParcelable(GAMEDATA, gData);
+                    ((QuizStart)getActivity()).replaceFragment(button, curr, R.id.point_display, "BUTTON");
                     curr.putParcelable(FLAG, flag);
                     curr.putInt(COLNUM, cols);
                     curr.putInt(COLORIENT, colOrient);

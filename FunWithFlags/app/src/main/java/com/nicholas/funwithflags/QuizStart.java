@@ -60,6 +60,7 @@ public class QuizStart extends AppCompatActivity {
         if(fragB == null) {
             fragB = new FlagSelector();
             Bundle curr = new Bundle();
+            curr.putParcelable(GAMEDATA, gData);
             curr.putInt(COLNUM, cols);
             curr.putInt(COLORIENT, colOrient);
             fragB.setArguments(curr);
