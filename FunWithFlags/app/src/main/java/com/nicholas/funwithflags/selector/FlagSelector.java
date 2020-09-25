@@ -1,23 +1,23 @@
-package com.nicholas.funwithflags;
+package com.nicholas.funwithflags.selector;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.ContactsContract;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.nicholas.funwithflags.model.Flag;
+import com.nicholas.funwithflags.model.FlagData;
+import com.nicholas.funwithflags.model.GameData;
+import com.nicholas.funwithflags.PointDisplayButton;
+import com.nicholas.funwithflags.QuizStart;
+import com.nicholas.funwithflags.R;
+
 import java.util.List;
 
 public class FlagSelector extends Fragment {
@@ -105,10 +105,10 @@ public class FlagSelector extends Fragment {
         }
     }
 
-    public Bundle getBundle(Flag flag)
+    public Bundle getBundle()
     {
         Bundle curr = new Bundle();
-        curr.putParcelable(FLAG, flag);
+        curr.putParcelable(GAMEDATA, gData);
         curr.putInt(COLNUM, cols);
         curr.putInt(COLORIENT, colOrient);
 

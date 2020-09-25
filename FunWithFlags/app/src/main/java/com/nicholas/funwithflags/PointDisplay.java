@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.nicholas.funwithflags.model.GameData;
+
 
 public class PointDisplay extends Fragment {
     private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
@@ -36,5 +38,13 @@ public class PointDisplay extends Fragment {
     public void printDisplay(int num)
     {
         points.setText("Points: " + gData.getCurrent());
+    }
+
+    public Bundle getBundle()
+    {
+        Bundle curr = new Bundle();
+        curr.putParcelable(GAMEDATA, gData);
+
+        return curr;
     }
 }

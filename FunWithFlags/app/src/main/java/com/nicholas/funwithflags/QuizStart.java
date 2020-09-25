@@ -10,9 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.nicholas.funwithflags.model.GameData;
+import com.nicholas.funwithflags.selector.FlagSelector;
+import com.nicholas.funwithflags.selector.LayoutSelector;
 
 public class QuizStart extends AppCompatActivity {
     private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
@@ -53,7 +54,7 @@ public class QuizStart extends AppCompatActivity {
             Bundle curr = new Bundle();
             curr.putParcelable(GAMEDATA, gData);
             fragC.setArguments(curr);
-            fm.beginTransaction().add(R.id.point_display, fragC).commit();
+            fm.beginTransaction().add(R.id.point_display, fragC, "POINTS").commit();
         }
 
         FlagSelector fragB = (FlagSelector) fm.findFragmentById(R.id.flag_selector);
@@ -87,11 +88,6 @@ public class QuizStart extends AppCompatActivity {
     }
 
     public void replaceFragment(Fragment newFragment, Bundle curr, int replaceView, String tag){
-        //QuesSelector newFragment = new QuesSelector();
-        //Bundle curr = new Bundle();
-        //curr.putParcelable(FLAG, flag);
-        //curr.putInt(COLNUM, cols);
-        //curr.putInt(COLORIENT, colOrient);
         newFragment.setArguments(curr);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

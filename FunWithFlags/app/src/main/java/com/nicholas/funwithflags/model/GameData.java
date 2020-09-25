@@ -1,9 +1,8 @@
-package com.nicholas.funwithflags;
+package com.nicholas.funwithflags.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 

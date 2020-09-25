@@ -1,46 +1,61 @@
-package com.nicholas.funwithflags;
+package com.nicholas.funwithflags.selector;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.nicholas.funwithflags.model.Answer;
+import com.nicholas.funwithflags.model.Flag;
+import com.nicholas.funwithflags.model.GameData;
+import com.nicholas.funwithflags.model.Question;
+import com.nicholas.funwithflags.R;
+
 import java.util.List;
 
-public class QuesSelector extends Fragment {
+public class AnsSelector extends Fragment {
     private RecyclerView rv;
     private FlagAdapter adapter;
     private GridLayoutManager rvLayout;
     private int cols, colOrient, tmp;
+    private Question question;
+    private TextView questionTest;
     private Flag flag;
+    private GameData gData;
     private static final String COLNUM = "com.nicholas.funwithflags.colnum";
     private static final String COLORIENT = "com.nicholas.funwithflags.colorientation";
-    private static final String FLAG = "com.nicholas.funwithflags.flag";
     private static final String QUESTION = "com.nicholas.funwithflags.question";
+    private static final String FLAG = "com.nicholas.funwithflags.flag";
+    private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_flag_selector, container, false);
+        View view = inflater.inflate(R.layout.fragment_ans_selector, container, false);
 
         Bundle bundle = getArguments();
+        gData = bundle.getParcelable(GAMEDATA);
         flag = bundle.getParcelable(FLAG);
+        question = bundle.getParcelable(QUESTION);
         cols = bundle.getInt(COLNUM);
         tmp = bundle.getInt(COLORIENT);
 
-        rv = view.findViewById(R.id.grid_layout);
+        questionTest = view.findViewById(R.id.question);
+        rv = view.findViewById(R.id.ans_layout);
+
+        questionTest.setText(question.getText());
 
         if(tmp == 0) { colOrient=RecyclerView.VERTICAL; }
         else { colOrient=RecyclerView.HORIZONTAL; }
 
-        adapter = new FlagAdapter(flag.getQuestions());
+        adapter = new FlagAdapter(question.getAnswers());
         rvLayout = new GridLayoutManager(getActivity(), cols, colOrient, false);
         rv.setAdapter(adapter);
         rv.setLayoutManager(rvLayout);
@@ -58,20 +73,15 @@ public class QuesSelector extends Fragment {
             textView = itemView.findViewById(R.id.questionText);
         }
 
-        public void bind(final Question question)
+        public void bind(Answer answer)
         {
-            textView.setText(question.export());
+            textView.setText(answer.export());
             textView.setClickable(true);
 
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ansSelector newFragment = new ansSelector();
-                    Bundle curr = new Bundle();
-                    curr.putParcelable(QUESTION, question);
-                    curr.putInt(COLNUM, cols);
-                    curr.putInt(COLORIENT, colOrient);
-                    ((QuizStart)getActivity()).replaceFragment(newFragment, curr, R.id.flag_selector, "ANSWER");
+
                 }
             });
         }
@@ -79,8 +89,8 @@ public class QuesSelector extends Fragment {
 
     public class FlagAdapter extends RecyclerView.Adapter<FlagViewHolder>
     {
-        private List<Question> data;
-        public FlagAdapter(List<Question> data) { this.data = data; }
+        private List<Answer> data;
+        public FlagAdapter(List<Answer> data) { this.data = data; }
 
         @Override
         public int getItemCount() { return data.size(); }
@@ -96,7 +106,14 @@ public class QuesSelector extends Fragment {
         }
     }
 
-    public Flag getFlag() {
-        return flag;
+    public Bundle getBundle() {
+        Bundle curr = new Bundle();
+        curr.putParcelable(GAMEDATA, gData);
+        curr.putParcelable(FLAG, flag);
+        curr.putParcelable(QUESTION, question);
+        curr.putInt(COLNUM, cols);
+        curr.putInt(COLORIENT, colOrient);
+
+        return curr;
     }
 }

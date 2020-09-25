@@ -1,7 +1,5 @@
-package com.nicholas.funwithflags;
+package com.nicholas.funwithflags.selector;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -12,8 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.ImageView;
+
+import com.nicholas.funwithflags.model.Flag;
+import com.nicholas.funwithflags.model.GameData;
+import com.nicholas.funwithflags.QuizStart;
+import com.nicholas.funwithflags.R;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class LayoutSelector extends Fragment {

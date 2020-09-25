@@ -1,4 +1,4 @@
-package com.nicholas.funwithflags;
+package com.nicholas.funwithflags.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
