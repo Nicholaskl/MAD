@@ -133,7 +133,7 @@ public class QuesSelector extends Fragment {
     }
 
     public void displayQuestion(TextView tv, Question ques) {
-        if(ques.getAnswered() == 0 && (gData.getWon() != 1))
+        if(ques.getAnswered() == 0 && (gData.getWon() != 1) && (gData.getLost() != 1))
         {
             tv.setClickable(true);
         }

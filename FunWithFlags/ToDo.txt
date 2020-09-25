@@ -1,9 +1,11 @@
-implement penalty - check if lose
 
 front screen image!
 
-Fix the default column number and orientation per layout
+Add questions list
 
+Add Question layouts in answers (4,3,2 answers)
+
+Fix the default column number and orientation per layout
 
 Landscape orientation
 

@@ -43,12 +43,16 @@ public class PointDisplayButton extends Fragment {
 
         points.setText("Points: " + gData.getCurrent() + "/" + gData.getTarget());
 
-        if(gData.getWon() != 1) {
-            win.setText("In Progress");
-        }
-        else {
+        if(gData.getWon() == 1) {
             win.setText("Game Won!");
             win.setTextColor(Color.GREEN);
+        }
+        else if(gData.getLost() == 1) {
+            win.setText("Game Lost! :(");
+            win.setTextColor(Color.RED);
+        }
+        else {
+            win.setText("In Progress");
         }
 
         back.setOnClickListener(new View.OnClickListener() {

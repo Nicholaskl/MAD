@@ -31,12 +31,16 @@ public class PointDisplay extends Fragment {
         progress = (TextView)view.findViewById(R.id.winText);
 
         points.setText("Points: " + gData.getCurrent() + "/" + gData.getTarget());
-        if(gData.getWon() != 1) {
-            progress.setText("In Progress");
-        }
-        else {
+        if(gData.getWon() == 1) {
             progress.setText("Game Won!");
             progress.setTextColor(Color.GREEN);
+        }
+        else if(gData.getLost() == 1) {
+            progress.setText("Game Lost! :(");
+            progress.setTextColor(Color.RED);
+        }
+        else {
+            progress.setText("In Progress");
         }
 
         return view;

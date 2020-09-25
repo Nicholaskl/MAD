@@ -121,7 +121,7 @@ public class FlagSelector extends Fragment {
     }
 
     public void displayImage(ImageView iv, Flag flag) {
-        if(flag.getAnswered() == 0 && (gData.getWon() != 1))
+        if(flag.getAnswered() == 0 && (gData.getWon() != 1) && (gData.getLost() != 1))
         {
             iv.setClickable(true);
         }

@@ -97,19 +97,24 @@ public class AnsSelector extends Fragment {
                         textView.setTextColor(Color.GREEN);
                         question.setAnswered(1);
 
-                        Fragment fm = getFragmentManager().findFragmentByTag("LAYOUT");
-                        if(fm == null || !fm.isVisible())
-                        {
-                            LayoutSelector ls = new LayoutSelector();
-                            //fm.beginTransaction().add(R.id.layout_selector, ls, "LAYOUT").commit();
-                            ((QuizStart)getActivity()).replaceFragment(new LayoutSelector(), getBundle(),
-                                    R.id.layout_selector, "LAYOUT");
-                        }
+                        refreshLayout();
+
                         ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), getBundle(),
                                 R.id.flag_selector, "QUESTION");
                     }
                     else {
+                        gData.incorrectAnswer(question.getPenalty());
+                        textView.setTextColor(Color.RED);
+                        answer.setAnswered();
 
+                        ((QuizStart)getActivity()).replaceFragment(new PointDisplayButton(), getBundle(),
+                                R.id.point_display, "BUTTON");
+
+                        if(gData.getLost() == 1) {
+                            refreshLayout();
+                            ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), getBundle(),
+                                    R.id.flag_selector, "QUESTION");
+                        }
                     }
                 }
             });
@@ -154,6 +159,17 @@ public class AnsSelector extends Fragment {
         else {
             tv.setTextColor(Color.GRAY);
             tv.setClickable(false);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void refreshLayout() {
+        Fragment fm = getFragmentManager().findFragmentByTag("LAYOUT");
+        if(fm == null || !fm.isVisible())
+        {
+            LayoutSelector ls = new LayoutSelector();
+            ((QuizStart)getActivity()).replaceFragment(new LayoutSelector(), getBundle(),
+                    R.id.layout_selector, "LAYOUT");
         }
     }
 }
