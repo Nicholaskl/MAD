@@ -1,0 +1,9 @@
+Fix the default column number and orientation per layout
+
+check if win
+
+implement penalty - check if lose
+
+Saturation on flag when finished!
+
+front screen image!

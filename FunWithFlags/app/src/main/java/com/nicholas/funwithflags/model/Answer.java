@@ -4,12 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Answer implements Parcelable {
-    public int correct;
-    public String text;
+    private int correct;
+    private String text;
+    private int answered;
 
     public Answer(int correct, String text) {
         this.correct = correct;
         this.text = text;
+        answered = 0;
     }
 
     public int getCorrect() {
@@ -24,6 +26,13 @@ public class Answer implements Parcelable {
         return text;
     }
 
+    public int getAnswered() {
+        return answered;
+    }
+
+    public void setAnswered() {
+        this.answered = 1;
+    }
 
     //Parcelling
 
@@ -41,6 +50,7 @@ public class Answer implements Parcelable {
     {
         this.correct = in.readInt();
         this.text = in.readString();
+        this.answered = in.readInt();
     }
 
     @Override
@@ -52,5 +62,6 @@ public class Answer implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.correct);
         dest.writeString(this.text);
+        dest.writeInt(this.answered);
     }
 }

@@ -45,7 +45,7 @@ public class QuizStart extends AppCompatActivity {
             curr.putInt(COLNUM, cols);
             curr.putInt(COLORIENT, colOrient);
             fragA.setArguments(curr);
-            fm.beginTransaction().add(R.id.layout_selector, fragA).commit();
+            fm.beginTransaction().add(R.id.layout_selector, fragA, "LAYOUT").commit();
         }
 
         PointDisplay fragC = (PointDisplay) fm.findFragmentById(R.id.point_display);

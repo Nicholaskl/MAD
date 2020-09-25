@@ -1,5 +1,6 @@
 package com.nicholas.funwithflags.selector;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,8 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.nicholas.funwithflags.PointDisplay;
 import com.nicholas.funwithflags.model.Flag;
 import com.nicholas.funwithflags.model.FlagData;
 import com.nicholas.funwithflags.model.GameData;
@@ -67,22 +70,22 @@ public class FlagSelector extends Fragment {
         public void bind(final Flag flag)
         {
             imageView.setImageResource(flag.getLocation());
-            imageView.setClickable(true);
 
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    PointDisplayButton button = new PointDisplayButton();
-                    QuesSelector newFragment = new QuesSelector();
-                    Bundle curr = new Bundle();
-                    curr.putParcelable(GAMEDATA, gData);
-                    ((QuizStart)getActivity()).replaceFragment(button, curr, R.id.point_display, "BUTTON");
+                    PointDisplay fm = (PointDisplay) getFragmentManager().findFragmentByTag("POINTS");
+                    ((QuizStart)getActivity()).replaceFragment(new PointDisplayButton(), fm.getBundle(),
+                            R.id.point_display, "BUTTON");
+
+                    Bundle curr = getBundle();
                     curr.putParcelable(FLAG, flag);
-                    curr.putInt(COLNUM, cols);
-                    curr.putInt(COLORIENT, colOrient);
-                    ((QuizStart)getActivity()).replaceFragment(newFragment, curr, R.id.flag_selector, "QUESTION");
+                    ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), curr,
+                            R.id.flag_selector, "QUESTION");
                 }
             });
+
+            displayImage(imageView, flag);
         }
     }
 
@@ -113,5 +116,16 @@ public class FlagSelector extends Fragment {
         curr.putInt(COLORIENT, colOrient);
 
         return curr;
+    }
+
+    public void displayImage(ImageView iv, Flag flag) {
+        if(flag.getAnswered() == 0 && (gData.getWon() != 1))
+        {
+            iv.setClickable(true);
+        }
+        else {
+            //iv.setSat;
+            iv.setClickable(false);
+        }
     }
 }

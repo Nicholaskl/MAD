@@ -10,11 +10,13 @@ public class Flag implements Parcelable
     private String name;
     private int location;
     private List<Question> questions;
+    private int answered;
 
     public Flag(String name, int location, List<Question> questions) {
         this.name = name;
         this.location = location;
         this.questions = questions;
+        this.answered = 0;
     }
 
     public int getLocation() {
@@ -31,6 +33,14 @@ public class Flag implements Parcelable
 
     public void addQuest(Question quest) {
         questions.add(quest);
+    }
+
+    public int getAnswered() {
+        return answered;
+    }
+
+    public void setAnswered(int answered) {
+        this.answered = answered;
     }
 
     //Parcelling
@@ -50,6 +60,7 @@ public class Flag implements Parcelable
         this.name = in.readString();
         this.location = in.readInt();
         in.readTypedList(questions, Question.CREATOR);
+        this.answered = in.readInt();
     }
 
     @Override
@@ -62,5 +73,6 @@ public class Flag implements Parcelable
         dest.writeString(this.name);
         dest.writeInt(this.location);
         dest.writeTypedList(this.questions);
+        dest.writeInt(this.answered);
     }
 }

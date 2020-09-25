@@ -3,20 +3,21 @@ package com.nicholas.funwithflags.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameData implements Parcelable {
-    private int target, start, current;
+    private int target, start, current, won;
     private Random rand;
-    List<Flag> flagList;
 
     public GameData() {
         rand = new Random();
         start = rand.nextInt((10 - 0) +1 );
         target  = rand.nextInt((30 - start+1) + 1) + start+1;
         current = start;
+        won = 0;
     }
+
 
 
     public int getCurrent() {
@@ -30,6 +31,20 @@ public class GameData implements Parcelable {
     public int getTarget() {
         return target;
     }
+
+    public int getWon() {
+        return won;
+    }
+
+    public int correctAnswer(int points) {
+        if((current + points) >= target) {
+            won = 1;
+        }
+            current += points;
+
+        return won;
+    }
+
 
     //Parcelling
 
@@ -48,6 +63,8 @@ public class GameData implements Parcelable {
         this.target = in.readInt();
         this.start = in.readInt();
         this.current = in.readInt();
+        this.won = in.readInt();
+
     }
 
     @Override
@@ -60,5 +77,6 @@ public class GameData implements Parcelable {
         dest.writeInt(this.target);
         dest.writeInt(this.start);
         dest.writeInt(this.current);
+        dest.writeInt(this.won);
     }
 }

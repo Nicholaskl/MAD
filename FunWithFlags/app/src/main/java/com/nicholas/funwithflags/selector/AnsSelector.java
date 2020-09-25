@@ -1,8 +1,12 @@
 package com.nicholas.funwithflags.selector;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,6 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.nicholas.funwithflags.PointDisplay;
+import com.nicholas.funwithflags.PointDisplayButton;
+import com.nicholas.funwithflags.QuizStart;
 import com.nicholas.funwithflags.model.Answer;
 import com.nicholas.funwithflags.model.Flag;
 import com.nicholas.funwithflags.model.GameData;
@@ -50,6 +57,12 @@ public class AnsSelector extends Fragment {
         questionTest = view.findViewById(R.id.question);
         rv = view.findViewById(R.id.ans_layout);
 
+        FragmentManager fm = getFragmentManager();
+        if(fm.findFragmentByTag("LAYOUT") != null)
+        {
+            fm.beginTransaction().remove(fm.findFragmentByTag("LAYOUT")).commit();
+        }
+
         questionTest.setText(question.getText());
 
         if(tmp == 0) { colOrient=RecyclerView.VERTICAL; }
@@ -73,15 +86,34 @@ public class AnsSelector extends Fragment {
             textView = itemView.findViewById(R.id.questionText);
         }
 
-        public void bind(Answer answer)
+        public void bind(final Answer answer)
         {
             textView.setText(answer.export());
-            textView.setClickable(true);
+            displayButton(textView, answer);
 
             textView.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void onClick(View view) {
+                    if(answer.getCorrect() == 1) {
+                        gData.correctAnswer(question.getPoints());
+                        textView.setTextColor(Color.GREEN);
+                        question.setAnswered(1);
 
+                        Fragment fm = getFragmentManager().findFragmentByTag("LAYOUT");
+                        if(fm == null || !fm.isVisible())
+                        {
+                            LayoutSelector ls = new LayoutSelector();
+                            //fm.beginTransaction().add(R.id.layout_selector, ls, "LAYOUT").commit();
+                            ((QuizStart)getActivity()).replaceFragment(new LayoutSelector(), getBundle(),
+                                    R.id.layout_selector, "LAYOUT");
+                        }
+                        ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), getBundle(),
+                                R.id.flag_selector, "QUESTION");
+                    }
+                    else {
+
+                    }
                 }
             });
         }
@@ -115,5 +147,16 @@ public class AnsSelector extends Fragment {
         curr.putInt(COLORIENT, colOrient);
 
         return curr;
+    }
+
+    public void displayButton(TextView tv, Answer ans) {
+        if(ans.getAnswered() == 0)
+        {
+            tv.setClickable(true);
+        }
+        else {
+            tv.setTextColor(Color.GRAY);
+            tv.setClickable(false);
+        }
     }
 }

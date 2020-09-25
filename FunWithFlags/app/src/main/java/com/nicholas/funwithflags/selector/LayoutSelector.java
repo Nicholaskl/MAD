@@ -41,8 +41,8 @@ public class LayoutSelector extends Fragment {
 
         Bundle bundle = getArguments();
         gData = bundle.getParcelable(GAMEDATA);
-        cols = bundle.getInt(COLNUM);
-        colOrient = bundle.getInt(COLORIENT);
+        cols = 2;
+        colOrient = 0;
 
         displayButtons();
 

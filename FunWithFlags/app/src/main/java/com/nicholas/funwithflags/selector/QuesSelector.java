@@ -1,20 +1,28 @@
 package com.nicholas.funwithflags.selector;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nicholas.funwithflags.PointDisplay;
+import com.nicholas.funwithflags.PointDisplayButton;
 import com.nicholas.funwithflags.model.Flag;
 import com.nicholas.funwithflags.model.GameData;
 import com.nicholas.funwithflags.model.Question;
 import com.nicholas.funwithflags.QuizStart;
 import com.nicholas.funwithflags.R;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -31,6 +39,7 @@ public class QuesSelector extends Fragment {
     private static final String FLAG = "com.nicholas.funwithflags.flag";
     private static final String QUESTION = "com.nicholas.funwithflags.question";
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,6 +51,10 @@ public class QuesSelector extends Fragment {
         flag = bundle.getParcelable(FLAG);
         cols = bundle.getInt(COLNUM);
         tmp = bundle.getInt(COLORIENT);
+
+        PointDisplay fm = (PointDisplay) getFragmentManager().findFragmentByTag("POINTS");
+        ((QuizStart)getActivity()).replaceFragment(new PointDisplayButton(), fm.getBundle(),
+                R.id.point_display, "BUTTON");
 
         rv = view.findViewById(R.id.grid_layout);
 
@@ -74,16 +87,14 @@ public class QuesSelector extends Fragment {
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AnsSelector newFragment = new AnsSelector();
-                    Bundle curr = new Bundle();
-                    curr.putParcelable(GAMEDATA, gData);
-                    curr.putParcelable(FLAG, flag);
+                    Bundle curr = getBundle();
+
                     curr.putParcelable(QUESTION, question);
-                    curr.putInt(COLNUM, cols);
-                    curr.putInt(COLORIENT, colOrient);
-                    ((QuizStart)getActivity()).replaceFragment(newFragment, curr, R.id.flag_selector, "ANSWER");
+                    ((QuizStart)getActivity()).replaceFragment(new AnsSelector(), curr,
+                            R.id.flag_selector, "ANSWER");
                 }
             });
+            displayQuestion(textView, question);
         }
     }
 
@@ -120,4 +131,16 @@ public class QuesSelector extends Fragment {
 
         return curr;
     }
+
+    public void displayQuestion(TextView tv, Question ques) {
+        if(ques.getAnswered() == 0 && (gData.getWon() != 1))
+        {
+            tv.setClickable(true);
+        }
+        else {
+            tv.setTextColor(Color.GRAY);
+            tv.setClickable(false);
+        }
+    }
+
 }

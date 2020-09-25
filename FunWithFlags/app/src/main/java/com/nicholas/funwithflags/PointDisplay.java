@@ -1,6 +1,7 @@
 package com.nicholas.funwithflags;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -29,7 +30,14 @@ public class PointDisplay extends Fragment {
         points = (TextView)view.findViewById(R.id.pointsText);
         progress = (TextView)view.findViewById(R.id.winText);
 
-        points.setText("Points: " + gData.getCurrent());
+        points.setText("Points: " + gData.getCurrent() + "/" + gData.getTarget());
+        if(gData.getWon() != 1) {
+            progress.setText("In Progress");
+        }
+        else {
+            progress.setText("Game Won!");
+            progress.setTextColor(Color.GREEN);
+        }
 
         return view;
     }
@@ -47,4 +55,5 @@ public class PointDisplay extends Fragment {
 
         return curr;
     }
+
 }

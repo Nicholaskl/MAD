@@ -12,6 +12,7 @@ public class Question implements Parcelable{
     private int index;
     private String text;
     private List<Answer> answers;
+    private int answered;
 
     public Question(int special, int points, int penalty, int index, String text, List<Answer> answers) {
         this.special = special;
@@ -20,6 +21,7 @@ public class Question implements Parcelable{
         this.index = index;
         this.text = text;
         this.answers = answers;
+        this.answered = 0;
     }
 
     public int getSpecial() {
@@ -44,6 +46,14 @@ public class Question implements Parcelable{
 
     public int getIndex() {
         return index;
+    }
+
+    public int getAnswered() {
+        return answered;
+    }
+
+    public void setAnswered(int answered) {
+        this.answered = answered;
     }
 
     public String export()
@@ -80,6 +90,7 @@ public class Question implements Parcelable{
         this.index = in.readInt();
         this.text = in.readString();
         in.readTypedList(answers, Answer.CREATOR);
+        this.answered = in.readInt();
     }
 
     @Override
@@ -95,5 +106,6 @@ public class Question implements Parcelable{
         dest.writeInt(this.index);
         dest.writeString(this.text);
         dest.writeTypedList(this.answers);
+        dest.writeInt(this.answered);
     }
 }
