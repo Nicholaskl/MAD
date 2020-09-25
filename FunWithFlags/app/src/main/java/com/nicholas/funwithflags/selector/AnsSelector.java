@@ -65,11 +65,8 @@ public class AnsSelector extends Fragment {
 
         questionTest.setText(question.getText());
 
-        if(tmp == 0) { colOrient=RecyclerView.VERTICAL; }
-        else { colOrient=RecyclerView.HORIZONTAL; }
-
         adapter = new FlagAdapter(question.getAnswers());
-        rvLayout = new GridLayoutManager(getActivity(), cols, colOrient, false);
+        rvLayout = new GridLayoutManager(getActivity(), 2, RecyclerView.VERTICAL, false);
         rv.setAdapter(adapter);
         rv.setLayoutManager(rvLayout);
 

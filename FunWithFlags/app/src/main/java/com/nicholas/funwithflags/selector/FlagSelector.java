@@ -1,6 +1,8 @@
 package com.nicholas.funwithflags.selector;
 
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -124,8 +126,11 @@ public class FlagSelector extends Fragment {
             iv.setClickable(true);
         }
         else {
-            //iv.setSat;
             iv.setClickable(false);
+            ColorMatrix matrix = new ColorMatrix();
+            matrix.setSaturation(0);
+            ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+            iv.setColorFilter(cf);
         }
     }
 }

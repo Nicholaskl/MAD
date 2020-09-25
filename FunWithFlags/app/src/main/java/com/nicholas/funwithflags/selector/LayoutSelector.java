@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,22 +102,22 @@ public class LayoutSelector extends Fragment {
 
     public void changeCol()
     {
-        Bundle curr = new Bundle();
-        curr.putInt(COLNUM, cols);
-        curr.putInt(COLORIENT, colOrient);
+        Fragment fm = getActivity().getSupportFragmentManager().findFragmentByTag("FLAG");
 
-        if(getActivity().getSupportFragmentManager().findFragmentByTag("FLAG").isVisible())
+        if(fm.isVisible())
         {
-            FlagSelector newFragment = new FlagSelector();
-            ((QuizStart)getActivity()).replaceFragment(newFragment, curr, R.id.flag_selector, "FLAG");
+            ((QuizStart)getActivity()).replaceFragment(new FlagSelector(), getBundle(),
+                    R.id.flag_selector, "FLAG");
         }
-        else if (getActivity().getSupportFragmentManager().findFragmentByTag("QUESTION").isVisible())
+        else
         {
             QuesSelector tmp = (QuesSelector)getActivity().getSupportFragmentManager().findFragmentByTag("QUESTION");
-            Flag flag = tmp.getFlag();
-            QuesSelector newFragment = new QuesSelector();
-            curr.putParcelable(FLAG, flag);
-            ((QuizStart)getActivity()).replaceFragment(newFragment, curr, R.id.flag_selector, "QUESTION");
+            Bundle curr = tmp.getBundle();
+            curr.putInt(COLNUM, cols);
+            curr.putInt(COLORIENT, colOrient);
+
+            ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), curr,
+                    R.id.flag_selector, "QUESTION");
         }
         displayButtons();
     }
@@ -129,5 +130,14 @@ public class LayoutSelector extends Fragment {
         else {
             arrow.setRotation(270);
         }
+    }
+
+    public Bundle getBundle() {
+        Bundle curr = new Bundle();
+        curr.putParcelable(GAMEDATA, gData);
+        curr.putInt(COLNUM, cols);
+        curr.putInt(COLORIENT, colOrient);
+
+        return curr;
     }
 }
