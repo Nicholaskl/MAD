@@ -1,9 +1,3 @@
-Fix the default column number and orientation per layout
-
-Make constant names appear once, no need to say in each class
-
-Add questions list
-
 Landscape orientation
 
 Tablet orientations
@@ -11,5 +5,7 @@ Tablet orientations
 Special Case Special Questions
 
 special layout tablet
+
+Add questions list
 
 commenting

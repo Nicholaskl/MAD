@@ -7,6 +7,20 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class GameData implements Parcelable {
+    public static final String COLNUM = "com.nicholas.funwithflags.colnum";
+    public static final String COLORIENT = "com.nicholas.funwithflags.colorientation";
+    public static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
+    public static final String FLAG = "com.nicholas.funwithflags.flag";
+    public static final String QUESTION = "com.nicholas.funwithflags.question";
+
+    public static final String F_LAYOUT = "com.nicholas.funwithflags.f_layout";
+    public static final String F_POINTS = "com.nicholas.funwithflags.f_points";
+    public static final String F_FLAG = "com.nicholas.funwithflags.f_flag";
+    public static final String F_QUESTION = "com.nicholas.funwithflags.f_question";
+    public static final String F_BUTTON = "com.nicholas.funwithflags.f_button";
+    public static final String F_ANSWER = "com.nicholas.funwithflags.f_answer";
+
+
     private int target, start, current, won, lost;
     private Random rand;
 

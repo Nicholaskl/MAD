@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.GridLayout;
 
 import com.nicholas.funwithflags.fragments.PointDisplay;
 import com.nicholas.funwithflags.model.GameData;
@@ -17,13 +18,8 @@ import com.nicholas.funwithflags.fragments.FlagSelector;
 import com.nicholas.funwithflags.fragments.LayoutSelector;
 
 public class QuizStart extends AppCompatActivity {
-    private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
-    private static final String COLNUM = "com.nicholas.funwithflags.colnum";
-    private static final String COLORIENT = "com.nicholas.funwithflags.colorientation";
-    private static final String FLAG = "com.nicholas.funwithflags.flag";
     private GameData gData;
     private int cols, colOrient;
-    private PointDisplay fragB;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -32,60 +28,38 @@ public class QuizStart extends AppCompatActivity {
         setContentView(R.layout.activity_quiz_start);
 
         Bundle data = getIntent().getExtras();
-        gData = (GameData) data.getParcelable(GAMEDATA);
-        cols = data.getInt(COLNUM);
-        colOrient = data.getInt(COLORIENT);
+        gData = data.getParcelable(GameData.GAMEDATA);
+        cols = 2;
+        colOrient = GridLayout.VERTICAL;
 
         FragmentManager fm = getSupportFragmentManager();
 
         LayoutSelector fragA = (LayoutSelector) fm.findFragmentById(R.id.layout_selector);
         if(fragA == null) {
             fragA = new LayoutSelector();
-            Bundle curr = new Bundle();
-            curr.putParcelable(GAMEDATA, gData);
-            curr.putInt(COLNUM, cols);
-            curr.putInt(COLORIENT, colOrient);
-            fragA.setArguments(curr);
-            fm.beginTransaction().add(R.id.layout_selector, fragA, "LAYOUT").commit();
+            fragA.setArguments(getBundle());
+            fm.beginTransaction().add(R.id.layout_selector, fragA, GameData.F_LAYOUT).commit();
         }
 
         PointDisplay fragC = (PointDisplay) fm.findFragmentById(R.id.point_display);
         if(fragC == null) {
             fragC = new PointDisplay();
-            Bundle curr = new Bundle();
-            curr.putParcelable(GAMEDATA, gData);
-            fragC.setArguments(curr);
-            fm.beginTransaction().add(R.id.point_display, fragC, "POINTS").commit();
+            fragC.setArguments(getBundle());
+            fm.beginTransaction().add(R.id.point_display, fragC, GameData.F_POINTS).commit();
         }
 
         FlagSelector fragB = (FlagSelector) fm.findFragmentById(R.id.flag_selector);
         if(fragB == null) {
             fragB = new FlagSelector();
-            Bundle curr = new Bundle();
-            curr.putParcelable(GAMEDATA, gData);
-            curr.putInt(COLNUM, cols);
-            curr.putInt(COLORIENT, colOrient);
-            fragB.setArguments(curr);
-            fm.beginTransaction().add(R.id.flag_selector, fragB, "FLAG").commit();
+            fragB.setArguments(getBundle());
+            fm.beginTransaction().add(R.id.flag_selector, fragB, GameData.F_FLAG).commit();
         }
     }
 
     public static Intent getIntent(Context c, GameData gData) {
         Intent intent = new Intent(c, QuizStart.class);
-        intent.putExtra(GAMEDATA, gData);
+        intent.putExtra(GameData.GAMEDATA, gData);
         return intent;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putParcelable(GAMEDATA, gData);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
     }
 
     public void replaceFragment(Fragment newFragment, Bundle curr, int replaceView, String tag){
@@ -100,5 +74,15 @@ public class QuizStart extends AppCompatActivity {
 
     // Commit the transaction
         transaction.commit();
+    }
+
+    public Bundle getBundle()
+    {
+        Bundle curr = new Bundle();
+        curr.putParcelable(GameData.GAMEDATA, gData);
+        curr.putInt(GameData.COLNUM, cols);
+        curr.putInt(GameData.COLORIENT, colOrient);
+
+        return curr;
     }
 }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import com.nicholas.funwithflags.model.GameData;
@@ -20,10 +21,6 @@ import com.nicholas.funwithflags.R;
 public class LayoutSelector extends Fragment {
     ImageView arrow;
     Button[] buttons = new Button[3];
-    private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
-    private static final String COLNUM = "com.nicholas.funwithflags.colnum";
-    private static final String COLORIENT = "com.nicholas.funwithflags.colorientation";
-    private static final String FLAG = "com.nicholas.funwithflags.flag";
     private GameData gData;
     private int cols, colOrient;
 
@@ -39,9 +36,9 @@ public class LayoutSelector extends Fragment {
         buttons[2] = view.findViewById(R.id.threeButton);
 
         Bundle bundle = getArguments();
-        gData = bundle.getParcelable(GAMEDATA);
+        gData = bundle.getParcelable(GameData.GAMEDATA);
         cols = 2;
-        colOrient = 0;
+        colOrient = GridLayout.VERTICAL;
 
         displayButtons();
 
@@ -100,29 +97,29 @@ public class LayoutSelector extends Fragment {
 
     public void changeCol()
     {
-        Fragment fm = getActivity().getSupportFragmentManager().findFragmentByTag("FLAG");
+        Fragment fm = getActivity().getSupportFragmentManager().findFragmentByTag(GameData.F_FLAG);
 
         if(fm.isVisible())
         {
             ((QuizStart)getActivity()).replaceFragment(new FlagSelector(), getBundle(),
-                    R.id.flag_selector, "FLAG");
+                    R.id.flag_selector, GameData.F_FLAG);
         }
         else
         {
-            QuesSelector tmp = (QuesSelector)getActivity().getSupportFragmentManager().findFragmentByTag("QUESTION");
+            QuesSelector tmp = (QuesSelector)getActivity().getSupportFragmentManager().findFragmentByTag(GameData.F_QUESTION);
             Bundle curr = tmp.getBundle();
-            curr.putInt(COLNUM, cols);
-            curr.putInt(COLORIENT, colOrient);
+            curr.putInt(GameData.COLNUM, cols);
+            curr.putInt(GameData.COLORIENT, colOrient);
 
             ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), curr,
-                    R.id.flag_selector, "QUESTION");
+                    R.id.flag_selector, GameData.F_QUESTION);
         }
         displayButtons();
     }
 
     public void setArrowDirection()
     {
-        if(colOrient == 0) {
+        if(colOrient == GridLayout.VERTICAL) {
             arrow.setRotation(180);
         }
         else {
@@ -132,9 +129,9 @@ public class LayoutSelector extends Fragment {
 
     public Bundle getBundle() {
         Bundle curr = new Bundle();
-        curr.putParcelable(GAMEDATA, gData);
-        curr.putInt(COLNUM, cols);
-        curr.putInt(COLORIENT, colOrient);
+        curr.putParcelable(GameData.GAMEDATA, gData);
+        curr.putInt(GameData.COLNUM, cols);
+        curr.putInt(GameData.COLORIENT, colOrient);
 
         return curr;
     }

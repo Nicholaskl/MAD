@@ -18,8 +18,6 @@ public class MainActivity extends AppCompatActivity {
     private Button startButton;
     private TextView winningText, startText;
     private GameData gData;
-    private static final String COLNUM = "com.nicholas.funwithflags.colnum";
-    private static final String COLORIENT = "com.nicholas.funwithflags.colorientation";
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -40,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = QuizStart.getIntent(MainActivity.this, gData);
-                intent.putExtra(COLNUM, 2);
-                intent.putExtra(COLORIENT, 0);
                 startActivity(intent);
             }
         });

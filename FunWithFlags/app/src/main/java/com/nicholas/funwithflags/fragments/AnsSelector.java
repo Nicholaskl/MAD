@@ -24,17 +24,12 @@ import com.nicholas.funwithflags.model.Question;
 import com.nicholas.funwithflags.R;
 
 public class AnsSelector extends Fragment {
-    private int cols, colOrient, tmp;
+    private int cols, colOrient;
     private Question question;
     private TextView questionTest;
     private Flag flag;
     private GameData gData;
     private Button[] buttons = new Button[4];
-    private static final String COLNUM = "com.nicholas.funwithflags.colnum";
-    private static final String COLORIENT = "com.nicholas.funwithflags.colorientation";
-    private static final String QUESTION = "com.nicholas.funwithflags.question";
-    private static final String FLAG = "com.nicholas.funwithflags.flag";
-    private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -44,18 +39,18 @@ public class AnsSelector extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ans_selector, container, false);
 
         Bundle bundle = getArguments();
-        gData = bundle.getParcelable(GAMEDATA);
-        flag = bundle.getParcelable(FLAG);
-        question = bundle.getParcelable(QUESTION);
-        cols = bundle.getInt(COLNUM);
-        tmp = bundle.getInt(COLORIENT);
+        gData = bundle.getParcelable(GameData.GAMEDATA);
+        flag = bundle.getParcelable(GameData.FLAG);
+        question = bundle.getParcelable(GameData.QUESTION);
+        cols = bundle.getInt(GameData.COLNUM);
+        colOrient = bundle.getInt(GameData.COLORIENT);
 
         questionTest = view.findViewById(R.id.question);
 
         FragmentManager fm = getFragmentManager();
-        if(fm.findFragmentByTag("LAYOUT") != null)
+        if(fm.findFragmentByTag(GameData.F_LAYOUT) != null)
         {
-            fm.beginTransaction().remove(fm.findFragmentByTag("LAYOUT")).commit();
+            fm.beginTransaction().remove(fm.findFragmentByTag(GameData.F_LAYOUT)).commit();
         }
 
         questionTest.setText(question.getText());
@@ -100,7 +95,7 @@ public class AnsSelector extends Fragment {
         refreshLayout();
 
         ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), getBundle(),
-                R.id.flag_selector, "QUESTION");
+                R.id.flag_selector, GameData.F_QUESTION);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -110,34 +105,34 @@ public class AnsSelector extends Fragment {
         ans.setAnswered();
 
         ((QuizStart) getActivity()).replaceFragment(new PointDisplayButton(), getBundle(),
-                R.id.point_display, "BUTTON");
+                R.id.point_display, GameData.F_BUTTON);
 
         if (gData.getLost() == 1) {
             refreshLayout();
             ((QuizStart) getActivity()).replaceFragment(new QuesSelector(), getBundle(),
-                    R.id.flag_selector, "QUESTION");
+                    R.id.flag_selector, GameData.F_QUESTION);
         }
     }
 
     public Bundle getBundle() {
         Bundle curr = new Bundle();
-        curr.putParcelable(GAMEDATA, gData);
-        curr.putParcelable(FLAG, flag);
-        curr.putParcelable(QUESTION, question);
-        curr.putInt(COLNUM, cols);
-        curr.putInt(COLORIENT, colOrient);
+        curr.putParcelable(GameData.GAMEDATA, gData);
+        curr.putParcelable(GameData.FLAG, flag);
+        curr.putParcelable(GameData.QUESTION, question);
+        curr.putInt(GameData.COLNUM, cols);
+        curr.putInt(GameData.COLORIENT, colOrient);
 
         return curr;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void refreshLayout() {
-        Fragment fm = getFragmentManager().findFragmentByTag("LAYOUT");
+        Fragment fm = getFragmentManager().findFragmentByTag(GameData.F_LAYOUT);
         if(fm == null || !fm.isVisible())
         {
             LayoutSelector ls = new LayoutSelector();
             ((QuizStart)getActivity()).replaceFragment(new LayoutSelector(), getBundle(),
-                    R.id.layout_selector, "LAYOUT");
+                    R.id.layout_selector, GameData.F_LAYOUT);
         }
     }
 }

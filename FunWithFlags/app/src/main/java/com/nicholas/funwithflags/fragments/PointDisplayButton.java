@@ -18,10 +18,6 @@ import com.nicholas.funwithflags.R;
 import com.nicholas.funwithflags.model.GameData;
 
 public class PointDisplayButton extends Fragment {
-    private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
-    private static final String COLNUM = "com.nicholas.funwithflags.colnum";
-    private static final String COLORIENT = "com.nicholas.funwithflags.colorientation";
-    private static final String FLAG = "com.nicholas.funwithflags.colorientation";
     private GameData gData;
     TextView win, points;
     Button back;
@@ -29,11 +25,11 @@ public class PointDisplayButton extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
+        gData = bundle.getParcelable(GameData.GAMEDATA);
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_point_display_button, container, false);
-        Bundle bundle = getArguments();
-        gData = bundle.getParcelable(GAMEDATA);
-
         win = view.findViewById(R.id.winTextButton);
         points = view.findViewById(R.id.pointsTextButton);
         back = view.findViewById(R.id.backButton);
@@ -56,27 +52,27 @@ public class PointDisplayButton extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
-                Fragment fm = getFragmentManager().findFragmentByTag("QUESTION");
+                Fragment fm = getFragmentManager().findFragmentByTag(GameData.F_QUESTION);
 
                 if(fm.isVisible()) {
                     ((QuizStart)getActivity()).replaceFragment(new PointDisplay(), getBundle(),
-                            R.id.point_display, "POINTS");
+                            R.id.point_display, GameData.F_POINTS);
                     ((QuizStart)getActivity()).replaceFragment(new FlagSelector(), ((QuesSelector)fm).getBundle(),
-                            R.id.flag_selector, "FLAG");
+                            R.id.flag_selector, GameData.F_FLAG);
                 }
                 else {
-                     fm = getFragmentManager().findFragmentByTag("LAYOUT");
+                     fm = getFragmentManager().findFragmentByTag(GameData.F_LAYOUT);
                     if(fm == null || !fm.isVisible())
                     {
                         LayoutSelector ls = new LayoutSelector();
-                        //fm.beginTransaction().add(R.id.layout_selector, ls, "LAYOUT").commit();
+                        //fm.beginTransaction().add(R.id.layout_selector, ls, GameData.F_LAYOUT).commit();
                         ((QuizStart)getActivity()).replaceFragment(new LayoutSelector(), getBundle(),
-                                R.id.layout_selector, "LAYOUT");
+                                R.id.layout_selector, GameData.F_LAYOUT);
                     }
 
-                    fm = getFragmentManager().findFragmentByTag("ANSWER");
+                    fm = getFragmentManager().findFragmentByTag(GameData.F_ANSWER);
                     ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), ((AnsSelector)fm).getBundle(),
-                            R.id.flag_selector, "QUESTION");
+                            R.id.flag_selector, GameData.F_QUESTION);
                 }
             }
         });
@@ -87,8 +83,14 @@ public class PointDisplayButton extends Fragment {
     public Bundle getBundle()
     {
         Bundle curr = new Bundle();
-        curr.putParcelable(GAMEDATA, gData);
+        curr.putParcelable(GameData.GAMEDATA, gData);
 
         return curr;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBundle(GameData.F_BUTTON, getBundle());
     }
 }

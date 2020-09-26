@@ -16,7 +16,6 @@ import com.nicholas.funwithflags.model.GameData;
 
 
 public class PointDisplay extends Fragment {
-    private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
     TextView points, progress;
     GameData gData;
 
@@ -24,12 +23,12 @@ public class PointDisplay extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Bundle bundle = getArguments();
-        gData = bundle.getParcelable(GAMEDATA);
+        gData = bundle.getParcelable(GameData.GAMEDATA);
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_point_display, container, false);
-        points = (TextView)view.findViewById(R.id.pointsText);
-        progress = (TextView)view.findViewById(R.id.winText);
+        points = view.findViewById(R.id.pointsText);
+        progress = view.findViewById(R.id.winText);
 
         points.setText("Points: " + gData.getCurrent() + "/" + gData.getTarget());
         if(gData.getWon() == 1) {
@@ -56,7 +55,7 @@ public class PointDisplay extends Fragment {
     public Bundle getBundle()
     {
         Bundle curr = new Bundle();
-        curr.putParcelable(GAMEDATA, gData);
+        curr.putParcelable(GameData.GAMEDATA, gData);
 
         return curr;
     }

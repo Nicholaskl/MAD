@@ -25,12 +25,8 @@ public class FlagSelector extends Fragment {
     private RecyclerView rv;
     private FlagAdapter adapter;
     private GridLayoutManager rvLayout;
-    private int cols, colOrient, tmp;
+    private int cols, colOrient;
     private GameData gData;
-    private static final String COLNUM = "com.nicholas.funwithflags.colnum";
-    private static final String COLORIENT = "com.nicholas.funwithflags.colorientation";
-    private static final String FLAG = "com.nicholas.funwithflags.flag";
-    private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,14 +34,11 @@ public class FlagSelector extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_flag_selector, container, false);
         Bundle bundle = getArguments();
-        gData = bundle.getParcelable(GAMEDATA);
-        cols = bundle.getInt(COLNUM);
-        tmp = bundle.getInt(COLORIENT);
+        gData = bundle.getParcelable(GameData.GAMEDATA);
+        cols = bundle.getInt(GameData.COLNUM);
+        colOrient = bundle.getInt(GameData.COLORIENT);
 
         rv = view.findViewById(R.id.grid_layout);
-
-        if(tmp == 0) { colOrient=RecyclerView.VERTICAL; }
-        else { colOrient=RecyclerView.HORIZONTAL; }
 
         adapter = new FlagAdapter(FlagData.getFlagList());
         rvLayout = new GridLayoutManager(getActivity(), cols, colOrient, false);
@@ -72,14 +65,14 @@ public class FlagSelector extends Fragment {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    PointDisplay fm = (PointDisplay) getFragmentManager().findFragmentByTag("POINTS");
+                    PointDisplay fm = (PointDisplay) getFragmentManager().findFragmentByTag(GameData.F_POINTS);
                     ((QuizStart)getActivity()).replaceFragment(new PointDisplayButton(), fm.getBundle(),
-                            R.id.point_display, "BUTTON");
+                            R.id.point_display, GameData.F_BUTTON);
 
                     Bundle curr = getBundle();
-                    curr.putParcelable(FLAG, flag);
+                    curr.putParcelable(GameData.FLAG, flag);
                     ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), curr,
-                            R.id.flag_selector, "QUESTION");
+                            R.id.flag_selector, GameData.F_QUESTION);
                 }
             });
 
@@ -109,9 +102,9 @@ public class FlagSelector extends Fragment {
     public Bundle getBundle()
     {
         Bundle curr = new Bundle();
-        curr.putParcelable(GAMEDATA, gData);
-        curr.putInt(COLNUM, cols);
-        curr.putInt(COLORIENT, colOrient);
+        curr.putParcelable(GameData.GAMEDATA, gData);
+        curr.putInt(GameData.COLNUM, cols);
+        curr.putInt(GameData.COLORIENT, colOrient);
 
         return curr;
     }
