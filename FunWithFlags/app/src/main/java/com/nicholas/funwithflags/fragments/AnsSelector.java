@@ -1,4 +1,4 @@
-package com.nicholas.funwithflags.selector;
+package com.nicholas.funwithflags.fragments;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -13,10 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.nicholas.funwithflags.PointDisplay;
-import com.nicholas.funwithflags.PointDisplayButton;
 import com.nicholas.funwithflags.QuizStart;
 import com.nicholas.funwithflags.model.Answer;
 import com.nicholas.funwithflags.model.Flag;
@@ -24,23 +23,20 @@ import com.nicholas.funwithflags.model.GameData;
 import com.nicholas.funwithflags.model.Question;
 import com.nicholas.funwithflags.R;
 
-import java.util.List;
-
 public class AnsSelector extends Fragment {
-    private RecyclerView rv;
-    private FlagAdapter adapter;
-    private GridLayoutManager rvLayout;
     private int cols, colOrient, tmp;
     private Question question;
     private TextView questionTest;
     private Flag flag;
     private GameData gData;
+    private Button[] buttons = new Button[4];
     private static final String COLNUM = "com.nicholas.funwithflags.colnum";
     private static final String COLORIENT = "com.nicholas.funwithflags.colorientation";
     private static final String QUESTION = "com.nicholas.funwithflags.question";
     private static final String FLAG = "com.nicholas.funwithflags.flag";
     private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,7 +51,6 @@ public class AnsSelector extends Fragment {
         tmp = bundle.getInt(COLORIENT);
 
         questionTest = view.findViewById(R.id.question);
-        rv = view.findViewById(R.id.ans_layout);
 
         FragmentManager fm = getFragmentManager();
         if(fm.findFragmentByTag("LAYOUT") != null)
@@ -65,78 +60,62 @@ public class AnsSelector extends Fragment {
 
         questionTest.setText(question.getText());
 
-        adapter = new FlagAdapter(question.getAnswers());
-        rvLayout = new GridLayoutManager(getActivity(), 2, RecyclerView.VERTICAL, false);
-        rv.setAdapter(adapter);
-        rv.setLayoutManager(rvLayout);
+        buttons[0] = view.findViewById(R.id.questionOne);
+        buttons[1] = view.findViewById(R.id.questionTwo);
+        buttons[2] = view.findViewById(R.id.questionThree);
+        buttons[3] = view.findViewById(R.id.questionFour);
 
-        return view;
-    }
-
-    private class FlagViewHolder extends RecyclerView.ViewHolder
-    {
-        private TextView textView;
-
-        public FlagViewHolder(LayoutInflater li, ViewGroup parent)
-        {
-            super(li.inflate(R.layout.question_cell, parent, false));
-            textView = itemView.findViewById(R.id.questionText);
+        for(int i = 0; i < 4; i++) {
+            buttons[i].setVisibility(View.GONE);
         }
 
-        public void bind(final Answer answer)
-        {
-            textView.setText(answer.export());
-            displayButton(textView, answer);
+        for(int i = 0; i < question.getAnswers().size(); i++) {
+            final Answer answer = question.getAnswers().get(i);
+            final Button butt = buttons[i];
 
-            textView.setOnClickListener(new View.OnClickListener() {
-                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            butt.setVisibility(View.VISIBLE);
+            butt.setText(answer.getText());
+            butt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(answer.getCorrect() == 1) {
-                        gData.correctAnswer(question.getPoints());
-                        textView.setTextColor(Color.GREEN);
-                        question.setAnswered(1);
-
-                        refreshLayout();
-
-                        ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), getBundle(),
-                                R.id.flag_selector, "QUESTION");
+                        correctAnswer(butt, answer);
                     }
                     else {
-                        gData.incorrectAnswer(question.getPenalty());
-                        textView.setTextColor(Color.RED);
-                        answer.setAnswered();
-
-                        ((QuizStart)getActivity()).replaceFragment(new PointDisplayButton(), getBundle(),
-                                R.id.point_display, "BUTTON");
-
-                        if(gData.getLost() == 1) {
-                            refreshLayout();
-                            ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), getBundle(),
-                                    R.id.flag_selector, "QUESTION");
-                        }
+                        incorrectAnswer(butt, answer);
                     }
                 }
             });
         }
+
+        return view;
     }
 
-    public class FlagAdapter extends RecyclerView.Adapter<FlagViewHolder>
-    {
-        private List<Answer> data;
-        public FlagAdapter(List<Answer> data) { this.data = data; }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void correctAnswer(Button butt, Answer ans) {
+        gData.correctAnswer(question.getPoints());
+        butt.setTextColor(Color.GREEN);
+        question.setAnswered(1);
 
-        @Override
-        public int getItemCount() { return data.size(); }
+        refreshLayout();
 
-        @Override
-        public FlagViewHolder onCreateViewHolder(ViewGroup container, int viewType) {
-            return new FlagViewHolder(LayoutInflater.from(getActivity()), container);
-        }
+        ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), getBundle(),
+                R.id.flag_selector, "QUESTION");
+    }
 
-        @Override
-        public void onBindViewHolder(FlagViewHolder vh, int index) {
-            vh.bind(data.get(index));
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void incorrectAnswer(Button butt, Answer ans) {
+        gData.incorrectAnswer(question.getPenalty());
+        butt.setTextColor(Color.RED);
+        ans.setAnswered();
+
+        ((QuizStart) getActivity()).replaceFragment(new PointDisplayButton(), getBundle(),
+                R.id.point_display, "BUTTON");
+
+        if (gData.getLost() == 1) {
+            refreshLayout();
+            ((QuizStart) getActivity()).replaceFragment(new QuesSelector(), getBundle(),
+                    R.id.flag_selector, "QUESTION");
         }
     }
 
@@ -149,17 +128,6 @@ public class AnsSelector extends Fragment {
         curr.putInt(COLORIENT, colOrient);
 
         return curr;
-    }
-
-    public void displayButton(TextView tv, Answer ans) {
-        if(ans.getAnswered() == 0)
-        {
-            tv.setClickable(true);
-        }
-        else {
-            tv.setTextColor(Color.GRAY);
-            tv.setClickable(false);
-        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

@@ -1,14 +1,15 @@
+Fix the default column number and orientation per layout
 
-front screen image!
+Make constant names appear once, no need to say in each class
 
 Add questions list
-
-Add Question layouts in answers (4,3,2 answers)
-
-Fix the default column number and orientation per layout
 
 Landscape orientation
 
 Tablet orientations
 
 Special Case Special Questions
+
+special layout tablet
+
+commenting

@@ -12,10 +12,22 @@ public class FlagData {
             new Answer(0, "Sydney")
     });
 
+    private static List<Answer> whatFlag = Arrays.asList(new Answer[] {
+            new Answer(0, "Italy"),
+            new Answer(0, "China"),
+            new Answer(0, "New Zealand"),
+            new Answer(1, "Australia")
+    });
+
+    private static List<Answer> population = Arrays.asList(new Answer[] {
+            new Answer(1, "24.99 million"),
+            new Answer(0, "20 million")
+    });
+
     private static List<Question> ausQues = Arrays.asList(new Question[] {
             new Question(0, 10, 5, 1, "What is the capital City", capitalCity),
-            new Question(1, 20, 10, 2, "What is the capital City", capitalCity),
-            new Question(0, 15, 6, 3, "What is the capital City", capitalCity)
+            new Question(1, 20, 10, 2, "What flag is this", whatFlag),
+            new Question(0, 15, 6, 3, "What is the capital City", population)
     });
 
     private static List<Flag> flagList = Arrays.asList(new Flag[] {

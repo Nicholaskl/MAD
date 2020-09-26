@@ -1,4 +1,4 @@
-package com.nicholas.funwithflags;
+package com.nicholas.funwithflags.fragments;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.nicholas.funwithflags.R;
 import com.nicholas.funwithflags.model.GameData;
 
 

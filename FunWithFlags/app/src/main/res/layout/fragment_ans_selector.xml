@@ -4,28 +4,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".selector.AnsSelector">
+    tools:context=".fragments.AnsSelector">
 
     <!-- TODO: Update blank fragment layout -->
+
+    <Button
+        android:id="@+id/questionFour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="@+id/questionThree"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/questionThree"
+        app:layout_constraintTop_toTopOf="@+id/questionThree" />
 
     <TextView
         android:id="@+id/question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="256dp"
         android:text="@string/hello_blank_fragment"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/ans_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ans_layout"
+    <Button
+        android:id="@+id/questionOne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/questionThree"
+        app:layout_constraintEnd_toStartOf="@+id/questionTwo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/question" />
+
+    <Button
+        android:id="@+id/questionTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/questionOne"
+        app:layout_constraintTop_toTopOf="@+id/questionOne" />
+
+    <Button
+        android:id="@+id/questionThree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="128dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/questionFour"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/questionOne" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

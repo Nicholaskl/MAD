@@ -1,6 +1,5 @@
-package com.nicholas.funwithflags.selector;
+package com.nicholas.funwithflags.fragments;
 
-import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
@@ -12,14 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.nicholas.funwithflags.PointDisplay;
 import com.nicholas.funwithflags.model.Flag;
 import com.nicholas.funwithflags.model.FlagData;
 import com.nicholas.funwithflags.model.GameData;
-import com.nicholas.funwithflags.PointDisplayButton;
 import com.nicholas.funwithflags.QuizStart;
 import com.nicholas.funwithflags.R;
 

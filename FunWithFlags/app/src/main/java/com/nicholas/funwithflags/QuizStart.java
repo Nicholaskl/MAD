@@ -11,9 +11,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.nicholas.funwithflags.fragments.PointDisplay;
 import com.nicholas.funwithflags.model.GameData;
-import com.nicholas.funwithflags.selector.FlagSelector;
-import com.nicholas.funwithflags.selector.LayoutSelector;
+import com.nicholas.funwithflags.fragments.FlagSelector;
+import com.nicholas.funwithflags.fragments.LayoutSelector;
 
 public class QuizStart extends AppCompatActivity {
     private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";

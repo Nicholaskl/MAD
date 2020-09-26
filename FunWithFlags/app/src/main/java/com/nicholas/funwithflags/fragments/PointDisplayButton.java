@@ -1,4 +1,4 @@
-package com.nicholas.funwithflags;
+package com.nicholas.funwithflags.fragments;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.nicholas.funwithflags.QuizStart;
+import com.nicholas.funwithflags.R;
 import com.nicholas.funwithflags.model.GameData;
-import com.nicholas.funwithflags.selector.AnsSelector;
-import com.nicholas.funwithflags.selector.FlagSelector;
-import com.nicholas.funwithflags.selector.LayoutSelector;
-import com.nicholas.funwithflags.selector.QuesSelector;
 
 public class PointDisplayButton extends Fragment {
     private static final String GAMEDATA = "com.nicholas.funwithflags.gdata";
