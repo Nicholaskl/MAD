@@ -19,9 +19,10 @@ public class GameData implements Parcelable {
     public static final String F_QUESTION = "com.nicholas.funwithflags.f_question";
     public static final String F_BUTTON = "com.nicholas.funwithflags.f_button";
     public static final String F_ANSWER = "com.nicholas.funwithflags.f_answer";
+    public static final String F_SPECIAL = "com.nicholas.funwithflags.f_special";
 
 
-    private int target, start, current, won, lost;
+    private int target, start, current, won, lost, special;
     private Random rand;
 
     public GameData() {
@@ -31,6 +32,7 @@ public class GameData implements Parcelable {
         current = start;
         won = 0;
         lost = 0;
+        special = 0;
     }
 
 
@@ -56,10 +58,14 @@ public class GameData implements Parcelable {
     }
 
     public void correctAnswer(int points) {
+        if(special == 1) {
+            points += 10;
+        }
         if((current + points) >= target) {
             won = 1;
         }
         current += points;
+        special = 0;
     }
 
     public void incorrectAnswer(int points) {
@@ -69,6 +75,13 @@ public class GameData implements Parcelable {
         current -= points;
     }
 
+    public int getSpecial() {
+        return special;
+    }
+
+    public void setSpecial(int special) {
+        this.special = special;
+    }
 
     //Parcelling
 
@@ -89,6 +102,7 @@ public class GameData implements Parcelable {
         this.current = in.readInt();
         this.won = in.readInt();
         this.lost = in.readInt();
+        this.special = in.readInt();
     }
 
     @Override
@@ -103,5 +117,6 @@ public class GameData implements Parcelable {
         dest.writeInt(this.current);
         dest.writeInt(this.won);
         dest.writeInt(this.lost);
+        dest.writeInt(this.special);
     }
 }

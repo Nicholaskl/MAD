@@ -70,6 +70,20 @@ public class Question implements Parcelable{
         return export;
     }
 
+    public String exportSpecial()
+    {
+        String export = "";
+        if(special == 1) {
+            export = String.format("Q%d(Special)\n" + "Point: %d\n" + "Penalty: %d\n",
+                    index, points+10, penalty);
+        }
+        else {
+            export = String.format("Q%d\n" + "Point: %d\n" + "Penalty: %d\n",
+                    index, points+10, penalty);
+        }
+        return export;
+    }
+
     //Parcelling
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

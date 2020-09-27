@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nicholas.funwithflags.SpecialCasetmp;
 import com.nicholas.funwithflags.model.Flag;
 import com.nicholas.funwithflags.model.GameData;
 import com.nicholas.funwithflags.model.Question;
@@ -42,9 +43,13 @@ public class QuesSelector extends Fragment {
         cols = bundle.getInt(GameData.COLNUM);
         colOrient = bundle.getInt(GameData.COLORIENT);
 
-        PointDisplay fm = (PointDisplay) getFragmentManager().findFragmentByTag(GameData.F_POINTS);
-        ((QuizStart)getActivity()).replaceFragment(new PointDisplayButton(), fm.getBundle(),
-                R.id.point_display, GameData.F_BUTTON);
+        if(!getResources().getBoolean(R.bool.isTablet)) {
+            if(getFragmentManager().findFragmentByTag(GameData.F_POINTS).isVisible()){
+                PointDisplay fm = (PointDisplay) getFragmentManager().findFragmentByTag(GameData.F_POINTS);
+                ((QuizStart)getActivity()).replaceFragment(new PointDisplayButton(), fm.getBundle(),
+                        R.id.point_display, GameData.F_BUTTON);
+            }
+        }
 
         rv = view.findViewById(R.id.grid_layout);
 
@@ -68,17 +73,27 @@ public class QuesSelector extends Fragment {
 
         public void bind(final Question question)
         {
-            textView.setText(question.export());
+            if(gData.getSpecial() == 1) {
+                textView.setText(question.exportSpecial());
+            }
+            else {
+                textView.setText(question.export());
+            }
             textView.setClickable(true);
 
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Bundle curr = getBundle();
-
                     curr.putParcelable(GameData.QUESTION, question);
-                    ((QuizStart)getActivity()).replaceFragment(new AnsSelector(), curr,
-                            R.id.flag_selector, GameData.F_ANSWER);
+                    if(!getResources().getBoolean(R.bool.isTablet)) {
+                        ((QuizStart) getActivity()).replaceFragment(new AnsSelector(), curr,
+                                R.id.flag_selector, GameData.F_ANSWER);
+                    }
+                    else {
+                        ((QuizStart) getActivity()).replaceFragment(new AnsSelector(), curr,
+                                R.id.flagAnsSpecial, GameData.F_ANSWER);
+                    }
                 }
             });
             displayQuestion(textView, question);

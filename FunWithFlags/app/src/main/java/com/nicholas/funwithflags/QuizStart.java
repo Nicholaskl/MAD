@@ -20,6 +20,7 @@ import com.nicholas.funwithflags.fragments.LayoutSelector;
 public class QuizStart extends AppCompatActivity {
     private GameData gData;
     private int cols, colOrient;
+    Fragment fragA, fragB, fragC;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -32,27 +33,70 @@ public class QuizStart extends AppCompatActivity {
         cols = 2;
         colOrient = GridLayout.VERTICAL;
 
+        if(savedInstanceState != null)
+        {
+            recreate(savedInstanceState);
+        }
+        else {
+            createNew();
+        }
+
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void createNew() {
         FragmentManager fm = getSupportFragmentManager();
 
-        LayoutSelector fragA = (LayoutSelector) fm.findFragmentById(R.id.layout_selector);
+        fragA = fm.findFragmentById(R.id.layout_selector);
         if(fragA == null) {
             fragA = new LayoutSelector();
             fragA.setArguments(getBundle());
             fm.beginTransaction().add(R.id.layout_selector, fragA, GameData.F_LAYOUT).commit();
         }
 
-        PointDisplay fragC = (PointDisplay) fm.findFragmentById(R.id.point_display);
-        if(fragC == null) {
-            fragC = new PointDisplay();
-            fragC.setArguments(getBundle());
-            fm.beginTransaction().add(R.id.point_display, fragC, GameData.F_POINTS).commit();
-        }
-
-        FlagSelector fragB = (FlagSelector) fm.findFragmentById(R.id.flag_selector);
+        fragB = fm.findFragmentById(R.id.flag_selector);
         if(fragB == null) {
             fragB = new FlagSelector();
             fragB.setArguments(getBundle());
             fm.beginTransaction().add(R.id.flag_selector, fragB, GameData.F_FLAG).commit();
+        }
+
+        fragC = fm.findFragmentById(R.id.point_display);
+        if (fragC == null) {
+            fragC = new PointDisplay();
+            fragC.setArguments(getBundle());
+            fm.beginTransaction().add(R.id.point_display, fragC, GameData.F_POINTS).commit();
+        }
+    }
+
+    public void recreate(Bundle savedInstanceState) {
+        FragmentManager fm = getSupportFragmentManager();
+
+        fragA = getSupportFragmentManager().getFragment(savedInstanceState, GameData.F_LAYOUT);
+        fragB = getSupportFragmentManager().getFragment(savedInstanceState, GameData.F_FLAG);
+
+        if(fragB != null) {
+            fm.beginTransaction().replace(R.id.layout_selector, fragA, GameData.F_LAYOUT);
+            fm.beginTransaction().replace(R.id.flag_selector, fragB, GameData.F_FLAG);
+            fragC = getSupportFragmentManager().getFragment(savedInstanceState, GameData.F_POINTS);
+            fm.beginTransaction().replace(R.id.point_display, fragC, GameData.F_POINTS);
+        }
+        else {
+            fragB = getSupportFragmentManager().getFragment(savedInstanceState, GameData.F_QUESTION);
+            if(fragB != null)
+            {
+                fm.beginTransaction().replace(R.id.layout_selector, fragA, GameData.F_LAYOUT);
+                fm.beginTransaction().replace(R.id.flag_selector, fragB, GameData.F_QUESTION);
+                fragC = getSupportFragmentManager().getFragment(savedInstanceState, GameData.F_BUTTON);
+                fm.beginTransaction().replace(R.id.point_display, fragC, GameData.F_BUTTON);
+            }
+            else {
+                fragB = getSupportFragmentManager().getFragment(savedInstanceState, GameData.F_ANSWER);
+                fm.beginTransaction().replace(R.id.flag_selector, fragB, GameData.F_ANSWER);
+                fragC = getSupportFragmentManager().getFragment(savedInstanceState, GameData.F_BUTTON);
+                fm.beginTransaction().replace(R.id.point_display, fragC, GameData.F_BUTTON);
+            }
         }
     }
 
@@ -84,5 +128,38 @@ public class QuizStart extends AppCompatActivity {
         curr.putInt(GameData.COLORIENT, colOrient);
 
         return curr;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        FragmentManager fm = getSupportFragmentManager();
+
+        if(fm.findFragmentByTag(GameData.F_FLAG).isVisible()) {
+            getSupportFragmentManager().putFragment(outState, GameData.F_FLAG, fm.findFragmentByTag(GameData.F_FLAG));
+            getSupportFragmentManager().putFragment(outState, GameData.F_LAYOUT, fm.findFragmentByTag(GameData.F_LAYOUT));
+            getSupportFragmentManager().putFragment(outState, GameData.F_POINTS, fm.findFragmentByTag(GameData.F_POINTS));
+        }
+        else if (fm.findFragmentByTag(GameData.F_QUESTION).isVisible()) {
+            getSupportFragmentManager().putFragment(outState, GameData.F_QUESTION, fm.findFragmentByTag(GameData.F_QUESTION));
+            getSupportFragmentManager().putFragment(outState, GameData.F_LAYOUT, fm.findFragmentByTag(GameData.F_LAYOUT));
+            getSupportFragmentManager().putFragment(outState, GameData.F_BUTTON, fm.findFragmentByTag(GameData.F_BUTTON));
+        }
+        else if (fm.findFragmentByTag(GameData.F_ANSWER).isVisible()) {
+            getSupportFragmentManager().putFragment(outState, GameData.F_ANSWER, fm.findFragmentByTag(GameData.F_ANSWER));
+            getSupportFragmentManager().putFragment(outState, GameData.F_BUTTON, fm.findFragmentByTag(GameData.F_BUTTON));
+        }
+    }
+
+    public void specialCase(Bundle bund) {
+        setContentView(R.layout.fragment_special_case);
+        FragmentManager fm = getSupportFragmentManager();
+
+        fragA = fm.findFragmentById(R.id.fragment_special);
+        if(fragA == null) {
+            fragA = new SpecialCase();
+            fragA.setArguments(getBundle());
+            fm.beginTransaction().add(R.id.fragment_special, fragA, GameData.F_SPECIAL).commit();
+        }
     }
 }

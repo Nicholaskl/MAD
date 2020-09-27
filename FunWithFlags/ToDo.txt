@@ -1,11 +1,14 @@
-Landscape orientation
+Special Case Special Questions // did this a cheaty way
 
-Tablet orientations
 
-Special Case Special Questions
+
 
 special layout tablet
 
 Add questions list
 
+question 3 columns too big
+
 commenting
+
+Make landscape and tablet version better

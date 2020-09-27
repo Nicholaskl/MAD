@@ -48,7 +48,7 @@ public class AnsSelector extends Fragment {
         questionTest = view.findViewById(R.id.question);
 
         FragmentManager fm = getFragmentManager();
-        if(fm.findFragmentByTag(GameData.F_LAYOUT) != null)
+        if((fm.findFragmentByTag(GameData.F_LAYOUT) != null) && !getResources().getBoolean(R.bool.isTablet))
         {
             fm.beginTransaction().remove(fm.findFragmentByTag(GameData.F_LAYOUT)).commit();
         }
@@ -93,7 +93,12 @@ public class AnsSelector extends Fragment {
         question.setAnswered(1);
 
         refreshLayout();
+        if(question.getSpecial() == 1) {
+            gData.setSpecial(1);
+        }
 
+        ((QuizStart) getActivity()).replaceFragment(new PointDisplayButton(), getBundle(),
+                R.id.point_display, GameData.F_BUTTON);
         ((QuizStart)getActivity()).replaceFragment(new QuesSelector(), getBundle(),
                 R.id.flag_selector, GameData.F_QUESTION);
     }

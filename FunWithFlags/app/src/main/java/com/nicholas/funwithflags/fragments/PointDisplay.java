@@ -46,12 +46,6 @@ public class PointDisplay extends Fragment {
         return view;
     }
 
-    @SuppressLint("SetTextI18n")
-    public void printDisplay(int num)
-    {
-        points.setText("Points: " + gData.getCurrent());
-    }
-
     public Bundle getBundle()
     {
         Bundle curr = new Bundle();

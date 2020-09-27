@@ -26,7 +26,7 @@ public class FlagData {
 
     private static List<Question> ausQues = Arrays.asList(new Question[] {
             new Question(0, 10, 5, 1, "What is the capital City", capitalCity),
-            new Question(1, 20, 10, 2, "What flag is this", whatFlag),
+            new Question(1, 2, 1, 2, "What flag is this", whatFlag),
             new Question(0, 15, 6, 3, "What is the capital City", population)
     });
 

@@ -18,7 +18,7 @@ import com.nicholas.funwithflags.R;
 import com.nicholas.funwithflags.model.GameData;
 
 public class PointDisplayButton extends Fragment {
-    private GameData gData;
+    GameData gData;
     TextView win, points;
     Button back;
 
@@ -59,6 +59,11 @@ public class PointDisplayButton extends Fragment {
                             R.id.point_display, GameData.F_POINTS);
                     ((QuizStart)getActivity()).replaceFragment(new FlagSelector(), ((QuesSelector)fm).getBundle(),
                             R.id.flag_selector, GameData.F_FLAG);
+                    if(getResources().getBoolean(R.bool.isTablet)) {
+                        if(getFragmentManager().findFragmentByTag(GameData.F_ANSWER) != null) {
+                            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag(GameData.F_ANSWER)).commit();
+                        }
+                    }
                 }
                 else {
                      fm = getFragmentManager().findFragmentByTag(GameData.F_LAYOUT);
