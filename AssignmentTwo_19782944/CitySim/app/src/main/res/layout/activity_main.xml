@@ -24,12 +24,12 @@
         android:layout_height="wrap_content"
         android:text="Play"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/SettingsButt"
+        app:layout_constraintEnd_toStartOf="@+id/settingsButt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/SettingsButt"
+        android:id="@+id/settingsButt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Settings"
