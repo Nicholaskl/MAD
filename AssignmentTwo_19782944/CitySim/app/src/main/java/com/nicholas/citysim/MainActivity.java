@@ -12,7 +12,7 @@ import com.nicholas.citysim.model.GameData;
 * File: MainActivity.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 8/10/2020
+* Modified: 10/10/2020
 * Purpose: Main activity, shows the title screen of game
  -------------------------------------------------------------*/
 
@@ -33,7 +33,11 @@ public class MainActivity extends AppCompatActivity {
             gData.getSettings().setMapWidth(data.getInt("WIDTH"));
             gData.getSettings().setMapHeight(data.getInt("HEIGHT"));
             gData.getSettings().setInitalMoney(data.getInt("MONEY"));
+
+            gData.updateSettings(gData);
         }
+
+        gData.load(this);
 
         play = findViewById(R.id.playButt);
         settings = findViewById(R.id.settingsButt);

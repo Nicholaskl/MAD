@@ -11,17 +11,35 @@ public class Structure {
     private int imageId;
     private Type type;
 
+    public Structure() {
+        this.imageId = 0;
+        this.type = null;
+    }
+
     public Structure(int imageId, Type type) {
         this.imageId = imageId;
         this.type = type;
         //this.type = Type.values()[type.ordinal()]; - Construct from database
     }
 
+    public Structure(int imageId, int type) {
+        this.imageId = imageId;
+        this.type = Type.values()[type];
+    }
+
     public enum Type {
-        ROAD, RESIDENTIAL, COMMERICIAL
+        ROAD, RESIDENTIAL, COMMERCIAL
     };
 
     public int getImageId() {
         return imageId;
+    }
+
+    public int getType() {
+        return type.ordinal();
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
     }
 }

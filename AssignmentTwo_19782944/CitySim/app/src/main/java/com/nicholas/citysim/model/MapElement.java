@@ -13,9 +13,15 @@ public class MapElement {
     private Bitmap image;
     private String ownerName;
 
-    public MapElement(Structure structure, String ownerName) {
-        this.structure = structure;
+    public MapElement() {
+        this.structure = new Structure();
         this.image = null;
+        this.ownerName = null;
+    }
+
+    public MapElement(Structure structure, Bitmap image, String ownerName) {
+        this.structure = structure;
+        this.image = image;
         this.ownerName = ownerName;
     }
 

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.nicholas.citysim.R;
 import com.nicholas.citysim.model.GameData;
+import com.nicholas.citysim.model.MapElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
 * File: MapGrid.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 8/10/2020
+* Modified: 10/10/2020
 * Purpose: Contains fragment for showing game grid
  -------------------------------------------------------------*/
 
@@ -36,23 +37,11 @@ public class MapFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_map_grid, container, false);
 
         rv = view.findViewById(R.id.grid_layout);
-        ArrayList<String> pp = new ArrayList<String>();
-        pp.add("pp");
-        pp.add("oo");
-        pp.add("oo");
-        pp.add("oo");
-        pp.add("oo");
-        pp.add("oo");
-        pp.add("pp");
-        pp.add("oo");
-        pp.add("oo");
-        pp.add("oo");
-        pp.add("oo");
-        pp.add("oo");
 
         gData = GameData.get();
+        gData.getMap()[8][1].getStructure().setImageId(R.drawable.ic_building1);
 
-        adapter = new MapAdapter(pp);
+        adapter = new MapAdapter(gData.getMap());
         //Creates the grid with cols and the orientation of cols
         rvLayout = new GridLayoutManager(getActivity(),
                 gData.getSettings().getMapHeight(),
@@ -87,10 +76,13 @@ public class MapFragment extends Fragment {
          * EXPORT:
          * ASSERTION: sets and handles all actions for the flag images
          */
-        public void bind(final String str)
+        public void bind(final MapElement ele)
         {
             //set image to the flag one
             //imageView.setImageResource(flag.getLocation());
+            if(ele.getStructure() != null) {
+                imageView.setImageResource(ele.getStructure().getImageId());
+            }
         }
     }
 
@@ -99,11 +91,11 @@ public class MapFragment extends Fragment {
      */
     public class MapAdapter extends RecyclerView.Adapter<MapViewHolder>
     {
-        private List<String> data;
-        public MapAdapter(List<String> data) { this.data = data; }
+        private MapElement[][] map;
+        public MapAdapter(MapElement[][] map) { this.map = map; }
 
         @Override
-        public int getItemCount() { return data.size(); }
+        public int getItemCount() { return map.length*map[0].length; }
 
         @Override
         public MapViewHolder onCreateViewHolder(ViewGroup container, int viewType) {
@@ -112,7 +104,7 @@ public class MapFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MapViewHolder vh, int index) {
-            vh.bind(data.get(index));
+            vh.bind(map[index % map.length][index / map.length]);
         }
     }
 }

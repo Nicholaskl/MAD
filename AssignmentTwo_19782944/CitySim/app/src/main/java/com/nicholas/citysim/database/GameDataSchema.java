@@ -3,7 +3,7 @@ package com.nicholas.citysim.database;
 * File: GameDataScheme.java
 * Author: Nicholas Klvana-Hooper
 * Created: 9/10/2020
-* Modified: 9/10/2020
+* Modified: 10/10/2020
 * Purpose: Holds the schema for the GameData database
  -------------------------------------------------------------*/
 
@@ -12,6 +12,7 @@ public class GameDataSchema {
         public static String NAME = "settings";
 
         public static class Cols {
+            public static final String ID = "id";
             public static final String WIDTH = "width";
             public static final String HEIGHT = "height";
             public static final String MONEY = "money";

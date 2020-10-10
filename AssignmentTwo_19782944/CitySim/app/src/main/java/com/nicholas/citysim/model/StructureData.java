@@ -21,10 +21,10 @@ public class StructureData {
             new Structure(R.drawable.ic_building4, Structure.Type.RESIDENTIAL)
     );
     private List<Structure> commercial = Arrays.asList(
-            new Structure(R.drawable.ic_building5, Structure.Type.COMMERICIAL),
-            new Structure(R.drawable.ic_building6, Structure.Type.COMMERICIAL),
-            new Structure(R.drawable.ic_building7, Structure.Type.COMMERICIAL),
-            new Structure(R.drawable.ic_building8, Structure.Type.COMMERICIAL)
+            new Structure(R.drawable.ic_building5, Structure.Type.COMMERCIAL),
+            new Structure(R.drawable.ic_building6, Structure.Type.COMMERCIAL),
+            new Structure(R.drawable.ic_building7, Structure.Type.COMMERCIAL),
+            new Structure(R.drawable.ic_building8, Structure.Type.COMMERCIAL)
     );
     private List<Structure> road = Arrays.asList(
             new Structure(R.drawable.ic_road_e, Structure.Type.ROAD),
