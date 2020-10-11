@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.nicholas.citysim.GameActivity;
 import com.nicholas.citysim.R;
 import com.nicholas.citysim.model.GameData;
 import com.nicholas.citysim.model.MapElement;
+import com.nicholas.citysim.model.Structure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,6 @@ public class MapFragment extends Fragment {
         rv = view.findViewById(R.id.grid_layout);
 
         gData = GameData.get();
-        gData.getMap()[8][1].getStructure().setImageId(R.drawable.ic_building1);
 
         adapter = new MapAdapter(gData.getMap());
         //Creates the grid with cols and the orientation of cols
@@ -53,12 +54,12 @@ public class MapFragment extends Fragment {
         return view;
     }
 
-    /* SUBMODULE: FlagViewHolder
-     * ASSERTION: The view holder for the flag fragment
+    /* SUBMODULE: MapViewHolder
+     * ASSERTION: The view holder for the map fragment
      */
     private class MapViewHolder extends RecyclerView.ViewHolder
     {
-        private ImageView imageView; //The flag images
+        private ImageView imageView; //The Map Element images
 
         public MapViewHolder(LayoutInflater li, ViewGroup parent)
         {
@@ -72,22 +73,31 @@ public class MapFragment extends Fragment {
         }
 
         /* SUBMODULE: bind
-         * IMPORT: flag (Flag)
+         * IMPORT: ele (MapElement)
          * EXPORT:
          * ASSERTION: sets and handles all actions for the flag images
          */
-        public void bind(final MapElement ele)
+        public void bind(final MapElement ele, final int index)
         {
+            final MapElement[][] map = gData.getMap();
             //set image to the flag one
-            //imageView.setImageResource(flag.getLocation());
             if(ele.getStructure() != null) {
                 imageView.setImageResource(ele.getStructure().getImageId());
+
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Structure curr = ((GameActivity)getActivity()).getCurrStruct();
+                        imageView.setImageResource(curr.getImageId());
+                        gData.getMap()[index % map.length][index / map.length].setStructure(curr);
+                    }
+                });
             }
         }
     }
 
-    /* SUBMODULE: FlagAdapter
-     * ASSERTION: The adapter for the flags
+    /* SUBMODULE: MapAdapter
+     * ASSERTION: The adapter for the map fragment
      */
     public class MapAdapter extends RecyclerView.Adapter<MapViewHolder>
     {
@@ -104,7 +114,7 @@ public class MapFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MapViewHolder vh, int index) {
-            vh.bind(map[index % map.length][index / map.length]);
+            vh.bind(map[index % map.length][index / map.length], index);
         }
     }
 }

@@ -42,4 +42,6 @@ public class Structure {
     public void setImageId(int imageId) {
         this.imageId = imageId;
     }
+
+    public String typeExport() { return type.toString(); }
 }

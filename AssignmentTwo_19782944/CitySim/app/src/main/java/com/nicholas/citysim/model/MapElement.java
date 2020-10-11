@@ -40,4 +40,8 @@ public class MapElement {
     public void setImage(Bitmap image) {
         this.image = image;
     }
+
+    public void setStructure(Structure structure) {
+        this.structure = structure;
+    }
 }

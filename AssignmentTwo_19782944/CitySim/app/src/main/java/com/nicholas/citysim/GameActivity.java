@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.nicholas.citysim.fragments.MapFragment;
+import com.nicholas.citysim.fragments.SelectorFragment;
 import com.nicholas.citysim.model.GameData;
+import com.nicholas.citysim.model.Structure;
 /*------------------------------------------------------------
 * File: GameActivity.java
 * Author: Nicholas Klvana-Hooper
@@ -19,7 +21,8 @@ import com.nicholas.citysim.model.GameData;
 
 public class GameActivity extends AppCompatActivity {
     GameData gData;
-    Fragment game;
+    Fragment game, selector;
+    Structure currStruct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,14 @@ public class GameActivity extends AppCompatActivity {
             game = new MapFragment();
             game.setArguments(getBundle());
             fm.beginTransaction().add(R.id.map_display, game, "MAP").commit();
+        }
+
+        //Start Fragment A which is the layout selector
+        selector = fm.findFragmentById(R.id.selector);
+        if(selector == null) {
+            selector = new SelectorFragment();
+            selector.setArguments(getBundle());
+            fm.beginTransaction().add(R.id.selector, selector, "SELECTOR").commit();
         }
     }
 
@@ -73,5 +84,9 @@ public class GameActivity extends AppCompatActivity {
         curr.putInt("MONEY", gData.getSettings().getInitalMoney());
 
         return curr;
+    }
+
+    public Structure getCurrStruct() {
+        return ((SelectorFragment)selector).getCurrStruc();
     }
 }

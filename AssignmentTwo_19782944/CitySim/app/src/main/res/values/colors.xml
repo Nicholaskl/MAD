@@ -3,4 +3,9 @@
     <color name="colorPrimary">#FAF083</color>
     <color name="colorPrimaryDark">#C7BF5F</color>
     <color name="colorAccent">#fff5ab</color>
+    <color name="commercial">#B4F3F2</color>
+    <color name="road">#F2E49B</color>
+    <color name="residential">#F5A2E1</color>
+    <color name="greyed_out">#cccccc</color>
+    <color name="white">#f7f7f7</color>
 </resources>
