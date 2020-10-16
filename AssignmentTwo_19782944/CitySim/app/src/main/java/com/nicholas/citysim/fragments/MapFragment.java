@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.support.v4.os.IResultReceiver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,8 +89,15 @@ public class MapFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Structure curr = ((GameActivity)getActivity()).getCurrStruct();
-                        imageView.setImageResource(curr.getImageId());
-                        gData.getMap()[index % map.length][index / map.length].setStructure(curr);
+                        MapElement currMapEle = gData.getMap()[rowFromIndex(index)][colFromIndex(index)];
+
+                        if(currMapEle.getStructure().getImageId() == 0 && curr != null) {
+                            if((curr.getType() > 0 && onRoad(index)) || curr.getType() == 0) {
+                                imageView.setImageResource(curr.getImageId());
+                                currMapEle.setStructure(curr);
+                                gData.addMapElement(currMapEle, index);
+                            }
+                        }
                     }
                 });
             }
@@ -114,7 +122,47 @@ public class MapFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MapViewHolder vh, int index) {
-            vh.bind(map[index % map.length][index / map.length], index);
+            vh.bind(map[rowFromIndex(index)][colFromIndex(index)], index);
         }
+    }
+
+    /* SUBMODULE: onRoad
+     * IMPORT: index (int)
+     * EXPORT: onRoad (Boolean)
+     * ASSERTION: outputs whether a structure is near a road
+     */
+    public Boolean onRoad(int index) {
+        Boolean onRoad  = false;
+        MapElement[][] map = gData.getMap();
+        Structure[] tmp = new Structure[4];
+
+        tmp[0] = map[Math.min(rowFromIndex(index) + 1, gData.getSettings().getMapWidth())][colFromIndex(index)].getStructure();
+        tmp[1] = map[Math.max(rowFromIndex(index) - 1, 0)][colFromIndex(index)].getStructure();
+        tmp[2] = map[rowFromIndex(index)][Math.min(colFromIndex(index) + 1, gData.getSettings().getMapHeight())].getStructure();
+        tmp[3] = map[rowFromIndex(index)][Math.max(colFromIndex(index) - 1, 0)].getStructure();
+
+        for(int i = 0; i < 4; i++) {
+            if(tmp[i].hasType() && tmp[i].getType() == 0) { onRoad = true; }
+        }
+        return onRoad;
+    }
+
+
+    /* SUBMODULE: colFromIndex
+     * IMPORT: index (int)
+     * EXPORT: col (int)
+     * ASSERTION: gets col number from index
+     */
+    public int colFromIndex(int index) {
+        return index / gData.getMap().length;
+    }
+
+    /* SUBMODULE: rowFromIndex
+     * IMPORT: index (int)
+     * EXPORT: row (int)
+     * ASSERTION: gets row number from index
+     */
+    public int rowFromIndex(int index) {
+        return index % gData.getMap().length;
     }
 }

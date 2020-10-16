@@ -16,7 +16,7 @@ import java.io.ByteArrayOutputStream;
 * File: GameData.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 10/10/2020
+* Modified: 16/10/2020
 * Purpose: Model class for GameData
  -------------------------------------------------------------*/
 
@@ -81,6 +81,7 @@ public class GameData {
     public void load(Context context) {
         int count = 0;
         settings = Settings.getInstance();
+        instance = get();
 
         this.db = new GameDataDBHelper(
             context.getApplicationContext()
@@ -108,6 +109,27 @@ public class GameData {
         }
         if(count == 0) {
             addSettings(this);
+        }
+
+        MapElementCursor cursor2 = new MapElementCursor(
+                db.query(MapElementTable.NAME,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null)
+        );
+        try {
+            cursor2.moveToFirst();
+            while(!cursor2.isAfterLast()) {
+                map[rowFromIndex(cursor2.getIndex())]
+                        [colFromIndex(cursor2.getIndex())] = cursor2.getMapElement();
+                cursor2.moveToNext();
+            }
+        }
+        finally {
+            cursor2.close();
         }
     }
 
@@ -190,37 +212,20 @@ public class GameData {
 
         //Bitmap to blob structure used from, Accessed on: 10/10/2020
         //https://stackoverflow.com/questions/10618325/how-to-create-a-blob-from-bitmap-in-android-activity/10618678
-        Bitmap bMap = mapElement.getImage();
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bMap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        ByteArrayOutputStream bos = null;
+        if (mapElement.getImage() != null) {
+            Bitmap bMap = mapElement.getImage();
+            bos = new ByteArrayOutputStream();
+            bMap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            cv.put(MapElementTable.Cols.IMAGE, bos.toByteArray());
+        }
 
         cv.put(MapElementTable.Cols.ID, index);
-        cv.put(MapElementTable.Cols.IMAGE, bos.toByteArray());
         cv.put(MapElementTable.Cols.OWNER, mapElement.getOwnerName());
         cv.put(MapElementTable.Cols.IMAGE_ID, mapElement.getStructure().getImageId());
         cv.put(MapElementTable.Cols.TYPE, mapElement.getStructure().getType());
 
         return cv;
-    }
-
-    public class MapDataCursor extends CursorWrapper {
-        public MapDataCursor(Cursor cursor) { super(cursor);}
-
-        /* Submodule: getMapElement
-         * Import:
-         * Export: MapElement
-         * Assertion: Cursor class that returns the next MapElement object
-         */
-        public MapElement getMapElement() {
-            byte[] blob = getBlob(getColumnIndex(MapElementTable.Cols.IMAGE));
-            Bitmap img = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-
-            String owner = getString(getColumnIndex(MapElementTable.Cols.OWNER));
-            int img_id = getInt(getColumnIndex(MapElementTable.Cols.IMAGE_ID));
-            int type = getInt(getColumnIndex(MapElementTable.Cols.TYPE));
-
-            return new MapElement(new Structure(img_id, type), img, owner);
-        }
     }
 
     public class SettingsCursor extends CursorWrapper {
@@ -236,12 +241,71 @@ public class GameData {
             int height = getInt(getColumnIndex(SettingsTable.Cols.HEIGHT));
             int money = getInt(getColumnIndex(SettingsTable.Cols.MONEY));
 
-            Settings sett = Settings.getInstance();;
+            Settings sett = Settings.getInstance();
             sett.setMapWidth(width);
             sett.setMapHeight(height);
             sett.setInitalMoney(money);
 
             return sett;
         }
+    }
+
+    public class MapElementCursor extends CursorWrapper {
+        public MapElementCursor(Cursor cursor) { super(cursor); }
+        /* Submodule: getSettings
+         * Import:
+         * Export: sett (Settings)
+         * Assertion: Cursor class that returns the next Settings object
+         */
+        public MapElement getMapElement() {
+            byte[] image_temp = getBlob(getColumnIndex(MapElementTable.Cols.IMAGE));
+            Bitmap image = null;
+            if(image_temp != null) {
+                image = BitmapFactory.decodeByteArray(image_temp, 0, image_temp.length);
+            }
+            String owner = getString(getColumnIndex(MapElementTable.Cols.OWNER));
+            int image_id = getInt(getColumnIndex(MapElementTable.Cols.IMAGE_ID));
+            int type = getInt(getColumnIndex(MapElementTable.Cols.TYPE));
+
+            MapElement mapEle = new MapElement();
+            Structure struct = new Structure();
+            struct.setImageId(image_id);
+            struct.setType(Structure.Type.values()[type]);
+            mapEle.setStructure(struct);
+            mapEle.setImage(image);
+            mapEle.setOwnerName(owner);
+
+            return mapEle;
+        }
+
+        /* Submodule: getIndex
+         * Import:
+         * Export: index (int)
+         * Assertion: Cursor class that returns the index of the settings object
+         */
+        public int getIndex() {
+            int id = 0;
+            id = getInt(getColumnIndex(MapElementTable.Cols.ID));
+
+            return id;
+        }
+    }
+
+    /* SUBMODULE: colFromIndex
+     * IMPORT: index (int)
+     * EXPORT: col (int)
+     * ASSERTION: gets col number from index
+     */
+    public int colFromIndex(int index) {
+        return index / map.length;
+    }
+
+    /* SUBMODULE: rowFromIndex
+     * IMPORT: index (int)
+     * EXPORT: row (int)
+     * ASSERTION: gets row number from index
+     */
+    public int rowFromIndex(int index) {
+        return index % map.length;
     }
 }

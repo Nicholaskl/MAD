@@ -43,5 +43,16 @@ public class Structure {
         this.imageId = imageId;
     }
 
-    public String typeExport() { return type.toString(); }
+    public String typeExport() {
+        String output = type.toString().toLowerCase();
+        return Character.toUpperCase(output.charAt(0)) + output.substring(1);
+    }
+
+    public Boolean hasType() {
+        return type != null;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
 }

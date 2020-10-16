@@ -81,15 +81,21 @@ public class SelectorFragment extends Fragment {
             //set image to the flag one
             imageView.setImageResource(stru.getImageId());
             textView.setText(stru.typeExport());
+            imageView.setBackgroundColor(getResources().getColor(R.color.white));
 
+            //if this structure is currently selected, make background grey
+            if(stru == currStruct) {
+                imageView.setBackgroundColor(getResources().getColor(R.color.greyed_out));
+            }
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //if there is a previous structure, make it white, then make current grey
                     if(currIV != null) {
                         currIV.setBackgroundColor(getResources().getColor(R.color.white));
                     }
-                    currStruct = stru;
                     imageView.setBackgroundColor(getResources().getColor(R.color.greyed_out));
+                    currStruct = stru;
                     currIV = imageView;
                 }
             });

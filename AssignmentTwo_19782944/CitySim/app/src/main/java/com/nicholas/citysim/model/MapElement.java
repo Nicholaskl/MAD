@@ -44,4 +44,8 @@ public class MapElement {
     public void setStructure(Structure structure) {
         this.structure = structure;
     }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
 }
