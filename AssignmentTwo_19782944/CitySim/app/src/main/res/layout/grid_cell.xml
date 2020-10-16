@@ -10,7 +10,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#8BC34A"
-            app:srcCompat="@drawable/ic_grass1"
             android:adjustViewBounds="true"
             tools:ignore="VectorDrawableCompat" />
 

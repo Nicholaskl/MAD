@@ -91,7 +91,12 @@ public class MapFragment extends Fragment {
                         Structure curr = ((GameActivity)getActivity()).getCurrStruct();
                         MapElement currMapEle = gData.getMap()[rowFromIndex(index)][colFromIndex(index)];
 
-                        if(currMapEle.getStructure().getImageId() == 0 && curr != null) {
+                        if(curr.getType() == Structure.Type.DEMOLISH.ordinal() && currMapEle.getStructure().getImageId() > 0) {
+                            imageView.setImageResource(0);
+                            currMapEle.setStructure(null);
+                            gData.removeMapElement(index); // remove from the database
+                        }
+                        else if(currMapEle.getStructure().getImageId() == 0) {
                             if((curr.getType() > 0 && onRoad(index)) || curr.getType() == 0) {
                                 imageView.setImageResource(curr.getImageId());
                                 currMapEle.setStructure(curr);
@@ -136,7 +141,7 @@ public class MapFragment extends Fragment {
         MapElement[][] map = gData.getMap();
         Structure[] tmp = new Structure[4];
 
-        tmp[0] = map[Math.min(rowFromIndex(index) + 1, gData.getSettings().getMapWidth())][colFromIndex(index)].getStructure();
+        tmp[0] = map[Math.min(rowFromIndex(index) + 1, gData.getSettings().getMapHeight() - 1)][colFromIndex(index)].getStructure();
         tmp[1] = map[Math.max(rowFromIndex(index) - 1, 0)][colFromIndex(index)].getStructure();
         tmp[2] = map[rowFromIndex(index)][Math.min(colFromIndex(index) + 1, gData.getSettings().getMapHeight())].getStructure();
         tmp[3] = map[rowFromIndex(index)][Math.max(colFromIndex(index) - 1, 0)].getStructure();

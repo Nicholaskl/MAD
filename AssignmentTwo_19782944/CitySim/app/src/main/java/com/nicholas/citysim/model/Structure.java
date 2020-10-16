@@ -28,7 +28,7 @@ public class Structure {
     }
 
     public enum Type {
-        ROAD, RESIDENTIAL, COMMERCIAL
+        ROAD, RESIDENTIAL, COMMERCIAL, DEMOLISH
     };
 
     public int getImageId() {

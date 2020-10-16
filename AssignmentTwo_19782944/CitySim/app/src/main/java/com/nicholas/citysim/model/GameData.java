@@ -182,6 +182,18 @@ public class GameData {
                 MapElementTable.Cols.ID + " = ?", whereValue);
     }
 
+    /* Submodule: removeMapElement
+     * Import: index(int)
+     * Export:
+     * Assertion: removes an element from the database
+     */
+    public void removeMapElement(int index) {
+        String[] whereValue = { String.valueOf(index) };
+        db.delete(MapElementTable.NAME,
+                MapElementTable.Cols.ID + " = ?", whereValue);
+
+    }
+
     /* Submodule: getCV
      * Import: GameData(gameData)
      * Export: cv(ContentValues)
