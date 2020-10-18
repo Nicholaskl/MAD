@@ -3,7 +3,7 @@ package com.nicholas.citysim.model;
 * File: Settings.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 8/10/2020
+* Modified: 18/10/2020
 * Purpose: Model class for Settings
  -------------------------------------------------------------*/
 
@@ -125,6 +125,20 @@ public class Settings {
 
     public int getRoadBuildingCost() {
         return roadBuildingCost;
+    }
+
+    /* Submodule: getCost
+     * Import: type(int)
+     * Export: cost (int)
+     * Assertion: Returns the cost of type of building specified
+     */
+    public int getCost(int type) {
+        int export = 0;
+        if(type == 0) { export = getRoadBuildingCost(); }
+        else if(type == 1) { export = getHouseBuildingCost(); }
+        else if(type== 2) { export = getCommBuildingCost(); }
+
+        return export;
     }
 
     public void setRoadBuildingCost(int roadBuildingCost) {

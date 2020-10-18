@@ -13,3 +13,7 @@ Stuff to show:
     name of city (top bar)
     Current temp
     BUtton to move time forward
+
+ Database new values - ie. money
+
+ Clean up code - use enum not ordinals!

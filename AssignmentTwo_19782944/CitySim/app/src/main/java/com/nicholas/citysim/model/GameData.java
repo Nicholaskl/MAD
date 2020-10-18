@@ -16,7 +16,7 @@ import java.io.ByteArrayOutputStream;
 * File: GameData.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 16/10/2020
+* Modified: 18/10/2020
 * Purpose: Model class for GameData
  -------------------------------------------------------------*/
 
@@ -26,6 +26,11 @@ public class GameData {
     private MapElement[][] map;
     private int money;
     private int gameTime;
+    private int population;
+    private int nResidential;
+    private int nCommerical;
+    private double empRate;
+    private int income;
     private SQLiteDatabase db;
 
     protected GameData() {
@@ -39,14 +44,34 @@ public class GameData {
             }
         }
         money = settings.getInitalMoney();
+
         gameTime = 0;
+        population = 0;
+        nResidential = 0;
+        nCommerical = 0;
+        empRate = 0.0;
+        income = 0;
     }
 
-    public static GameData get() {
+    public static GameData getInstance() {
         if(instance == null) {
             instance = new GameData();
         }
         return instance;
+    }
+
+    public void setGameTime(int gameTime) {
+        this.gameTime = gameTime;
+    }
+
+    public Boolean setMoney(int money) {
+        Boolean gameOver = false;
+
+        if(money <= 0) {
+            gameOver = true;
+        }
+        this.money = money;
+        return gameOver;
     }
 
     public SQLiteDatabase getDb() {
@@ -69,6 +94,43 @@ public class GameData {
         return settings;
     }
 
+    public int getnCommerical() {
+        return nCommerical;
+    }
+
+    public int getnResidential() {
+        return nResidential;
+    }
+
+    public void setBuldingNum(Structure.Type type) {
+        if(type == Structure.Type.COMMERCIAL) { nCommerical++; }
+        else if(type == Structure.Type.RESIDENTIAL) { nResidential++; }
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public double getEmpRate() {
+        return empRate;
+    }
+
+    public void setEmpRate(double empRate) {
+        this.empRate = empRate;
+    }
+
+    public int getIncome() {
+        return income;
+    }
+
+    public void setIncome(int income) {
+        this.income = income;
+    }
+
+    public void setPopulation() {
+        this.population = settings.getFamilySize() * nResidential;
+    }
+
     //Have to do settings setting here, cuase have to make the array...
 
     //Database functions
@@ -81,7 +143,7 @@ public class GameData {
     public void load(Context context) {
         int count = 0;
         settings = Settings.getInstance();
-        instance = get();
+        instance = getInstance();
 
         this.db = new GameDataDBHelper(
             context.getApplicationContext()
@@ -235,7 +297,7 @@ public class GameData {
         cv.put(MapElementTable.Cols.ID, index);
         cv.put(MapElementTable.Cols.OWNER, mapElement.getOwnerName());
         cv.put(MapElementTable.Cols.IMAGE_ID, mapElement.getStructure().getImageId());
-        cv.put(MapElementTable.Cols.TYPE, mapElement.getStructure().getType());
+        cv.put(MapElementTable.Cols.TYPE, mapElement.getStructure().getOrdinal());
 
         return cv;
     }

@@ -1,14 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InfoDisplay">
+    tools:context=".fragments.InfoDisplayFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <Button
+        android:id="@+id/timeStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time Step"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/gameTime"
+        app:layout_constraintVertical_bias="0.499" />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/gameTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Curr Time: 1Yr"
+        app:layout_constraintStart_toEndOf="@id/employmentRate"
+        app:layout_constraintBottom_toTopOf="@+id/temperature"
+        app:layout_constraintEnd_toStartOf="@+id/timeStep"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/currMoney"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$100"
+        app:layout_constraintBottom_toBottomOf="@+id/temperature"
+        app:layout_constraintEnd_toStartOf="@+id/temperature"
+        app:layout_constraintStart_toEndOf="@+id/population"
+        app:layout_constraintTop_toTopOf="@+id/temperature" />
+
+    <TextView
+        android:id="@+id/population"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Population: 200"
+        app:layout_constraintBottom_toBottomOf="@+id/temperature"
+        app:layout_constraintEnd_toStartOf="@+id/currMoney"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/temperature" />
+
+    <TextView
+        android:id="@+id/employmentRate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EmpRate: 20%"
+        app:layout_constraintBottom_toBottomOf="@+id/gameTime"
+        app:layout_constraintEnd_toStartOf="@+id/gameTime"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gameTime" />
+
+    <TextView
+        android:id="@+id/temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Temp: 20º"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/timeStep"
+        app:layout_constraintStart_toEndOf="@+id/currMoney"
+        app:layout_constraintTop_toBottomOf="@+id/gameTime" />
+
+    <TextView
+        android:id="@+id/gameOverText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF4444"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

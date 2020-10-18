@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.support.v4.os.IResultReceiver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,11 @@ import com.nicholas.citysim.R;
 import com.nicholas.citysim.model.GameData;
 import com.nicholas.citysim.model.MapElement;
 import com.nicholas.citysim.model.Structure;
-
-import java.util.ArrayList;
-import java.util.List;
 /*------------------------------------------------------------
 * File: MapGrid.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 10/10/2020
+* Modified: 16/10/2020
 * Purpose: Contains fragment for showing game grid
  -------------------------------------------------------------*/
 
@@ -38,12 +34,11 @@ public class MapFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map_grid, container, false);
-
         rv = view.findViewById(R.id.grid_layout);
 
-        gData = GameData.get();
-
+        gData = GameData.getInstance();
         adapter = new MapAdapter(gData.getMap());
+
         //Creates the grid with cols and the orientation of cols
         rvLayout = new GridLayoutManager(getActivity(),
                 gData.getSettings().getMapHeight(),
@@ -67,7 +62,8 @@ public class MapFragment extends Fragment {
             super(li.inflate(R.layout.grid_cell, parent, false));
             imageView = itemView.findViewById(R.id.imageView);
 
-            int size = parent.getMeasuredHeight() / GameData.get().getSettings().getMapHeight() + 1;
+            //Provided by Practical 3 worksheet, helps with gap between grid elements
+            int size = parent.getMeasuredHeight() / GameData.getInstance().getSettings().getMapHeight() + 1;
             ViewGroup.LayoutParams lp = itemView.getLayoutParams();
             lp.width = size;
             lp.height = size;
@@ -80,28 +76,50 @@ public class MapFragment extends Fragment {
          */
         public void bind(final MapElement ele, final int index)
         {
-            final MapElement[][] map = gData.getMap();
-            //set image to the flag one
-            if(ele.getStructure() != null) {
+            if (ele.getStructure() == null ) { //If current element doesn't have a resource set background to transparent
+            imageView.setImageResource(0);
+             }
+            else {
                 imageView.setImageResource(ele.getStructure().getImageId());
 
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
+                    public void onClick(View view)
+                    {
                         Structure curr = ((GameActivity)getActivity()).getCurrStruct();
                         MapElement currMapEle = gData.getMap()[rowFromIndex(index)][colFromIndex(index)];
 
-                        if(curr.getType() == Structure.Type.DEMOLISH.ordinal() && currMapEle.getStructure().getImageId() > 0) {
+                        if(currMapEle.getStructure() != null &&
+                                curr != null &&
+                                curr.getType() == Structure.Type.DEMOLISH &&
+                                currMapEle.getStructure().getImageId() > 0)
+                        {
                             imageView.setImageResource(0);
-                            currMapEle.setStructure(null);
+                            currMapEle.setStructure(new Structure());
+
                             gData.removeMapElement(index); // remove from the database
                         }
-                        else if(currMapEle.getStructure().getImageId() == 0) {
-                            if((curr.getType() > 0 && onRoad(index)) || curr.getType() == 0) {
-                                imageView.setImageResource(curr.getImageId());
-                                currMapEle.setStructure(curr);
-                                gData.addMapElement(currMapEle, index);
+                        else if(currMapEle.getStructure() != null &&
+                                curr != null &&
+                                currMapEle.getStructure().getImageId() == 0 &&
+                                curr.getType() != Structure.Type.DEMOLISH &&
+                                ((curr.getOrdinal() > 0 && onRoad(index)) || curr.getOrdinal() == 0))
+                        {
+                            imageView.setImageResource(curr.getImageId());
+                            currMapEle.setStructure(curr);
+
+                            Boolean win = gData.setMoney(
+                                    gData.getMoney() -
+                                    gData.getSettings().getCost(curr.getOrdinal()));
+
+                            if(curr.getType() != Structure.Type.ROAD) {
+                                gData.setBuldingNum(curr.getType());
                             }
+
+                            if(!win) { ((GameActivity) getActivity()).refreshInfo(); }
+                            else { ((GameActivity) getActivity()).gameOver(); }
+
+                            gData.addMapElement(currMapEle, index); //add to the database
                         }
                     }
                 });
@@ -147,26 +165,16 @@ public class MapFragment extends Fragment {
         tmp[3] = map[rowFromIndex(index)][Math.max(colFromIndex(index) - 1, 0)].getStructure();
 
         for(int i = 0; i < 4; i++) {
-            if(tmp[i].hasType() && tmp[i].getType() == 0) { onRoad = true; }
+            if(tmp[i].hasType() && tmp[i].getOrdinal() == 0) { onRoad = true; }
         }
         return onRoad;
     }
 
-
-    /* SUBMODULE: colFromIndex
-     * IMPORT: index (int)
-     * EXPORT: col (int)
-     * ASSERTION: gets col number from index
-     */
+    // These functions find the row or column numbers for the map array from a 1D index
     public int colFromIndex(int index) {
         return index / gData.getMap().length;
     }
 
-    /* SUBMODULE: rowFromIndex
-     * IMPORT: index (int)
-     * EXPORT: row (int)
-     * ASSERTION: gets row number from index
-     */
     public int rowFromIndex(int index) {
         return index % gData.getMap().length;
     }

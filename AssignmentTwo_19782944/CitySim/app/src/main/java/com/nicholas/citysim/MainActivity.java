@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        gData = GameData.get();
+        gData = GameData.getInstance();
 
         //If have come from the settings page, update the game data
         Bundle data = getIntent().getExtras();

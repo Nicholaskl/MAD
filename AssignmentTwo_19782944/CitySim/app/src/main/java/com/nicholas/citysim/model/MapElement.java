@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 * File: MapElement.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 8/10/2020
+* Modified: 18/10/2020
 * Purpose: Model class for Map Elements
  -------------------------------------------------------------*/
 

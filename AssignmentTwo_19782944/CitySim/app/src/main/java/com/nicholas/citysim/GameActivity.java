@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.nicholas.citysim.fragments.InfoDisplayFragment;
 import com.nicholas.citysim.fragments.MapFragment;
 import com.nicholas.citysim.fragments.SelectorFragment;
 import com.nicholas.citysim.model.GameData;
@@ -15,13 +16,13 @@ import com.nicholas.citysim.model.Structure;
 * File: GameActivity.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 8/10/2020
+* Modified: 18/10/2020
 * Purpose: Game activity, contains all game functionality
  -------------------------------------------------------------*/
 
 public class GameActivity extends AppCompatActivity {
     GameData gData;
-    Fragment game, selector;
+    Fragment game, selector, info;
     Structure currStruct;
 
     @Override
@@ -29,7 +30,7 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        gData = GameData.get();
+        gData = GameData.getInstance();
 
         //If have come from the settings page, update the game data
         Bundle data = getIntent().getExtras();
@@ -55,6 +56,14 @@ public class GameActivity extends AppCompatActivity {
             selector = new SelectorFragment();
             selector.setArguments(getBundle());
             fm.beginTransaction().add(R.id.selector, selector, "SELECTOR").commit();
+        }
+
+        //Start Fragment A which is the layout selector
+        info = fm.findFragmentById(R.id.game_info);
+        if(info == null) {
+            info = new InfoDisplayFragment();
+            info.setArguments(getBundle());
+            fm.beginTransaction().add(R.id.game_info, info, "INFO").commit();
         }
     }
 
@@ -89,4 +98,8 @@ public class GameActivity extends AppCompatActivity {
     public Structure getCurrStruct() {
         return ((SelectorFragment)selector).getCurrStruc();
     }
+
+    public void refreshInfo() { ((InfoDisplayFragment)info).refresh(); }
+
+    public void gameOver() { ((InfoDisplayFragment)info).gameOver(); }
 }

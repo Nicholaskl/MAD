@@ -3,7 +3,7 @@ package com.nicholas.citysim.model;
 * File: Structure.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 8/10/2020
+* Modified: 18/10/2020
 * Purpose: Model class for a structure
  -------------------------------------------------------------*/
 
@@ -35,9 +35,11 @@ public class Structure {
         return imageId;
     }
 
-    public int getType() {
+    public int getOrdinal() {
         return type.ordinal();
     }
+
+    public Type getType() { return type; }
 
     public void setImageId(int imageId) {
         this.imageId = imageId;
