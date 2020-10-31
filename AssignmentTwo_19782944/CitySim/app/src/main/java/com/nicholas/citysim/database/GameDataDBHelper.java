@@ -26,7 +26,13 @@ public class GameDataDBHelper extends SQLiteOpenHelper {
                 MapElementTable.Cols.ID + " INTEGER, " +
                 SettingsTable.Cols.WIDTH + " INTEGER, " +
                 SettingsTable.Cols.HEIGHT + " INTEGER, " +
-                SettingsTable.Cols.MONEY + " INTEGER)"
+                SettingsTable.Cols.MONEY + " INTEGER, " +
+                SettingsTable.Cols.TIME + " INTEGER, " +
+                SettingsTable.Cols.CURRMONEY + " INTEGER, " +
+                SettingsTable.Cols.NCOMMERCIAL + " INTEGER, " +
+                SettingsTable.Cols.NRESIDENTIAL + " INTEGER, " +
+                SettingsTable.Cols.INCOME + " INTEGER, " +
+                SettingsTable.Cols.GAMEOVER + " INTEGER)"
         );
         db.execSQL("CREATE TABLE " + MapElementTable.NAME + "(" +
                 MapElementTable.Cols.ID + " INTEGER, " +

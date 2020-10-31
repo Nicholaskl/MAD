@@ -16,6 +16,12 @@ public class GameDataSchema {
             public static final String WIDTH = "width";
             public static final String HEIGHT = "height";
             public static final String MONEY = "money";
+            public static final String TIME = "time";
+            public static final String CURRMONEY = "currmoney";
+            public static final String NCOMMERCIAL = "ncommerical";
+            public static final String NRESIDENTIAL = "nresidential";
+            public static final String INCOME = "income";
+            public static final String GAMEOVER = "gameover";
         }
     }
 

@@ -1,19 +1,7 @@
-Demolish
-Money
-Population
-game time
-
-
-Stuff to show:
-    game time
-    current money
-    recent income (+40)
-    population
-    employment rate
-    name of city (top bar)
-    Current temp
-    BUtton to move time forward
-
  Database new values - ie. money
+
+ SINGLETONSS NICK!!!
+ Game over persistent??
+ picture stuff
 
  Clean up code - use enum not ordinals!

@@ -6,6 +6,7 @@ import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 
 import com.nicholas.citysim.database.GameDataDBHelper;
 import com.nicholas.citysim.database.GameDataSchema.MapElementTable;
@@ -16,7 +17,7 @@ import java.io.ByteArrayOutputStream;
 * File: GameData.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 18/10/2020
+* Modified: 29/10/2020
 * Purpose: Model class for GameData
  -------------------------------------------------------------*/
 
@@ -24,33 +25,18 @@ public class GameData {
     private static GameData instance = null;
     private Settings settings;
     private MapElement[][] map;
-    private int money;
-    private int gameTime;
-    private int population;
-    private int nResidential;
-    private int nCommerical;
-    private double empRate;
-    private int income;
+    private int money, gameTime, population, nResidential, nCommercial, income, gameOver;
+    private double empRate, weather;
     private SQLiteDatabase db;
+    public static String urlString =
+            Uri.parse("http://api.openweathermap.org/data/2.5/weather")
+            .buildUpon()
+            .appendQueryParameter("q", "Perth")
+            .appendQueryParameter("appid", "52a297468dbf88f674bd46fe1db37b05")
+            .build().toString();
 
     protected GameData() {
-        settings = Settings.getInstance();
-        map = new MapElement[settings.getMapHeight()][settings.getMapWidth()];
-
-        //Fill array with null
-        for(int i = 0; i < settings.getMapHeight(); i++) {
-            for(int j=0; j < settings.getMapWidth(); j++) {
-                map[i][j] = new MapElement();
-            }
-        }
-        money = settings.getInitalMoney();
-
-        gameTime = 0;
-        population = 0;
-        nResidential = 0;
-        nCommerical = 0;
-        empRate = 0.0;
-        income = 0;
+        reset();
     }
 
     public static GameData getInstance() {
@@ -64,14 +50,11 @@ public class GameData {
         this.gameTime = gameTime;
     }
 
-    public Boolean setMoney(int money) {
-        Boolean gameOver = false;
-
+    public void setMoney(int money) {
         if(money <= 0) {
-            gameOver = true;
+            gameOver = 1;
         }
         this.money = money;
-        return gameOver;
     }
 
     public SQLiteDatabase getDb() {
@@ -94,16 +77,28 @@ public class GameData {
         return settings;
     }
 
-    public int getnCommerical() {
-        return nCommerical;
+    public int getnCommercial() {
+        return nCommercial;
     }
 
     public int getnResidential() {
         return nResidential;
     }
 
+    public void setnResidential(int nResidential) {
+        this.nResidential = nResidential;
+    }
+
+    public void setnCommercial(int nCommercial) {
+        this.nCommercial = nCommercial;
+    }
+
+    public double getWeather() {
+        return weather;
+    }
+
     public void setBuldingNum(Structure.Type type) {
-        if(type == Structure.Type.COMMERCIAL) { nCommerical++; }
+        if(type == Structure.Type.COMMERCIAL) { nCommercial++; }
         else if(type == Structure.Type.RESIDENTIAL) { nResidential++; }
     }
 
@@ -123,6 +118,10 @@ public class GameData {
         return income;
     }
 
+    public int getGameOver() {
+        return gameOver;
+    }
+
     public void setIncome(int income) {
         this.income = income;
     }
@@ -131,9 +130,22 @@ public class GameData {
         this.population = settings.getFamilySize() * nResidential;
     }
 
+    public void setWeather(double weather) {
+        this.weather = weather;
+    }
+
+    public static void setInstance(GameData instance) {
+        GameData.instance = instance;
+    }
+
     //Have to do settings setting here, cuase have to make the array...
 
     //Database functions
+
+    public void clearDB() {
+        db.execSQL("delete from " + SettingsTable.NAME);
+        db.execSQL("delete from " + MapElementTable.NAME);
+    }
 
     /* Submodule: load
      * Import: context(Context)
@@ -201,19 +213,8 @@ public class GameData {
      * Assertion: Add a new settings object to the database
      */
     public void addSettings(GameData gameData) {
-        System.out.println("OWO: WI");
         ContentValues cv = getSettingsCV(gameData);
         db.insert(SettingsTable.NAME, null, cv);
-    }
-
-    /* Submodule: addMapElement
-     * Import: mapElement(MapElement)
-     * Export:
-     * Assertion: Add a new map element to the database
-     */
-    public void addMapElement(MapElement mapElement, int index) {
-        ContentValues cv = getMapDataCV(mapElement, index);
-        db.insert(MapElementTable.NAME, null, cv);
     }
 
     /* Submodule: updateSettings
@@ -224,36 +225,9 @@ public class GameData {
     public void updateSettings(GameData gameData) {
         ContentValues cv = getSettingsCV(gameData);
 
-        System.out.println(gameData.getSettings().getMapHeight());
-
         String[] whereValue = { String.valueOf(0) };
         db.update(SettingsTable.NAME, cv,
                 SettingsTable.Cols.ID + " = ?", whereValue);
-    }
-
-    /* Submodule: updateSettings
-     * Import: GameData(gameData)
-     * Export:
-     * Assertion: Updates settings in the database
-     */
-    public void updateMapElement(MapElement mapElement, int index) {
-        ContentValues cv = getMapDataCV(mapElement, index);
-
-        String[] whereValue = { String.valueOf(index) };
-        db.update(MapElementTable.NAME, cv,
-                MapElementTable.Cols.ID + " = ?", whereValue);
-    }
-
-    /* Submodule: removeMapElement
-     * Import: index(int)
-     * Export:
-     * Assertion: removes an element from the database
-     */
-    public void removeMapElement(int index) {
-        String[] whereValue = { String.valueOf(index) };
-        db.delete(MapElementTable.NAME,
-                MapElementTable.Cols.ID + " = ?", whereValue);
-
     }
 
     /* Submodule: getCV
@@ -270,10 +244,74 @@ public class GameData {
         cv.put(SettingsTable.Cols.WIDTH, sett.getMapWidth());
         cv.put(SettingsTable.Cols.HEIGHT, sett.getMapHeight());
         cv.put(SettingsTable.Cols.MONEY, sett.getInitalMoney());
+        cv.put(SettingsTable.Cols.TIME, getGameTime());
+        cv.put(SettingsTable.Cols.CURRMONEY, getMoney());
+        cv.put(SettingsTable.Cols.NCOMMERCIAL, getnCommercial());
+        cv.put(SettingsTable.Cols.NRESIDENTIAL, getnResidential());
+        cv.put(SettingsTable.Cols.INCOME, getIncome());
+        cv.put(SettingsTable.Cols.GAMEOVER, getGameOver());
 
         return cv;
     }
 
+    public class SettingsCursor extends CursorWrapper {
+        public SettingsCursor(Cursor cursor) { super(cursor);}
+
+        /* Submodule: getSettings
+         * Import:
+         * Export: sett (Settings)
+         * Assertion: Cursor class that returns the next Settings object
+         */
+        public Settings getSettings() {
+            Settings sett = Settings.getInstance();
+            sett.setMapWidth(getInt(getColumnIndex(SettingsTable.Cols.WIDTH)));
+            sett.setMapHeight(getInt(getColumnIndex(SettingsTable.Cols.HEIGHT)));
+            sett.setInitalMoney(getInt(getColumnIndex(SettingsTable.Cols.MONEY)));
+            gameTime = getInt(getColumnIndex(SettingsTable.Cols.TIME));
+            money = getInt(getColumnIndex(SettingsTable.Cols.CURRMONEY));
+            nCommercial = getInt(getColumnIndex(SettingsTable.Cols.NCOMMERCIAL));
+            nResidential = getInt(getColumnIndex(SettingsTable.Cols.NRESIDENTIAL));
+            income = getInt(getColumnIndex(SettingsTable.Cols.INCOME));
+            gameOver = getInt(getColumnIndex(SettingsTable.Cols.GAMEOVER));
+
+            return sett;
+        }
+    }
+
+    /* Submodule: updateSettings
+     * Import: GameData(gameData)
+     * Export:
+     * Assertion: Updates settings in the database
+     */
+    public void updateMapElement(MapElement mapElement, int index) {
+        ContentValues cv = getMapDataCV(mapElement, index);
+
+        String[] whereValue = { String.valueOf(index) };
+        db.update(MapElementTable.NAME, cv,
+                MapElementTable.Cols.ID + " = ?", whereValue);
+    }
+
+    /* Submodule: addMapElement
+     * Import: mapElement(MapElement)
+     * Export:
+     * Assertion: Add a new map element to the database
+     */
+    public void addMapElement(MapElement mapElement, int index) {
+        ContentValues cv = getMapDataCV(mapElement, index);
+        db.insert(MapElementTable.NAME, null, cv);
+    }
+
+    /* Submodule: removeMapElement
+     * Import: index(int)
+     * Export:
+     * Assertion: removes an element from the database
+     */
+    public void removeMapElement(int index) {
+        String[] whereValue = { String.valueOf(index) };
+        db.delete(MapElementTable.NAME,
+                MapElementTable.Cols.ID + " = ?", whereValue);
+
+    }
 
     /* Submodule: getMapDataCV
      * Import: GameData(gameData)
@@ -300,28 +338,6 @@ public class GameData {
         cv.put(MapElementTable.Cols.TYPE, mapElement.getStructure().getOrdinal());
 
         return cv;
-    }
-
-    public class SettingsCursor extends CursorWrapper {
-        public SettingsCursor(Cursor cursor) { super(cursor);}
-
-        /* Submodule: getSettings
-         * Import:
-         * Export: sett (Settings)
-         * Assertion: Cursor class that returns the next Settings object
-         */
-        public Settings getSettings() {
-            int width = getInt(getColumnIndex(SettingsTable.Cols.WIDTH));
-            int height = getInt(getColumnIndex(SettingsTable.Cols.HEIGHT));
-            int money = getInt(getColumnIndex(SettingsTable.Cols.MONEY));
-
-            Settings sett = Settings.getInstance();
-            sett.setMapWidth(width);
-            sett.setMapHeight(height);
-            sett.setInitalMoney(money);
-
-            return sett;
-        }
     }
 
     public class MapElementCursor extends CursorWrapper {
@@ -382,4 +398,27 @@ public class GameData {
     public int rowFromIndex(int index) {
         return index % map.length;
     }
+
+    public void reset() {
+        settings = Settings.getInstance();
+        map = new MapElement[settings.getMapHeight()][settings.getMapWidth()];
+
+        //Fill array with null
+        for(int i = 0; i < settings.getMapHeight(); i++) {
+            for(int j=0; j < settings.getMapWidth(); j++) {
+                map[i][j] = new MapElement();
+            }
+        }
+        money = settings.getInitalMoney();
+
+        gameTime = 0;
+        population = 0;
+        nResidential = 0;
+        nCommercial = 0;
+        empRate = 0.0;
+        income = 0;
+        weather = 0.0;
+        gameOver = 0;
+    }
 }
+

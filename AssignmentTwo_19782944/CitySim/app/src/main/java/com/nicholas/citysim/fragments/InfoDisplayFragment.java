@@ -1,6 +1,5 @@
 package com.nicholas.citysim.fragments;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,7 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.nicholas.citysim.GameActivity;
-import com.nicholas.citysim.MainActivity;
 import com.nicholas.citysim.R;
 import com.nicholas.citysim.model.GameData;
 /*------------------------------------------------------------
@@ -64,7 +62,7 @@ public class InfoDisplayFragment extends Fragment {
         gData.setGameTime(gData.getGameTime() + 1);
         gData.setPopulation();
         gData.setEmpRate(Math.min(1,
-                gData.getnCommerical() * gData.getSettings().getShopSize() / (double)gData.getPopulation()));
+                gData.getnCommercial() * gData.getSettings().getShopSize() / (double)gData.getPopulation()));
 
         int incomeNum = (int)(gData.getPopulation() * (
                 gData.getEmpRate() *
@@ -79,6 +77,9 @@ public class InfoDisplayFragment extends Fragment {
             gData.setPopulation();
             gData.setMoney(gData.getMoney() + incomeNum);
         }
+
+        new GameActivity.DownloadWeather((GameActivity)getActivity()).execute();
+        gData.updateSettings(gData);
     }
 
     /* SUBMODULE: refresh
@@ -88,9 +89,16 @@ public class InfoDisplayFragment extends Fragment {
     public void refresh() {
         gameTime.setText("Curr time: " + gData.getGameTime() + "yr");
         money.setText("$" + gData.getMoney() + " +" + gData.getIncome());
+
+        gData.setPopulation();
         population.setText("Population: " + gData.getPopulation());
+
+        gData.setEmpRate(Math.min(1,
+                gData.getnCommercial() * gData.getSettings().getShopSize() / (double)gData.getPopulation()));
         employment.setText("Employ Rate: " + gData.getEmpRate()*100.0 + "%");
-        temp.setText("ºC");
+        new GameActivity.DownloadWeather((GameActivity)getActivity()).execute();
+
+        if(gData.getGameOver() == 1) { gameOver(); }
     }
 
     public void gameOver() {

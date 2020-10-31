@@ -22,9 +22,9 @@
         android:id="@+id/playButt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Play"
+        android:text="New Game"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/settingsButt"
+        app:layout_constraintEnd_toStartOf="@+id/continueButt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -34,6 +34,15 @@
         android:layout_height="wrap_content"
         android:text="Settings"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/continueButt"
+        app:layout_constraintTop_toTopOf="@+id/playButt" />
+
+    <Button
+        android:id="@+id/continueButt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Continue"
+        app:layout_constraintEnd_toStartOf="@+id/settingsButt"
         app:layout_constraintStart_toEndOf="@+id/playButt"
         app:layout_constraintTop_toTopOf="@+id/playButt" />
 

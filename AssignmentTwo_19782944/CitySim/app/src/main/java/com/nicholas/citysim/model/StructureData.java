@@ -8,7 +8,7 @@ import java.util.List;
 * File: StructureData.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 11/10/2020
+* Modified: 30/10/2020
 * Purpose: Model class for StructureData
  -------------------------------------------------------------*/
 
@@ -40,7 +40,8 @@ public class StructureData {
             new Structure(R.drawable.ic_road_sew, Structure.Type.ROAD),
             new Structure(R.drawable.ic_road_sw, Structure.Type.ROAD),
             new Structure(R.drawable.ic_road_w, Structure.Type.ROAD),
-            new Structure(R.drawable.cross, Structure.Type.DEMOLISH)
+            new Structure(R.drawable.cross, Structure.Type.DEMOLISH),
+            new Structure(R.drawable.info, Structure.Type.INFO)
     );
 
     public StructureData getInstance() {

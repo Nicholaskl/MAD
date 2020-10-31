@@ -12,12 +12,12 @@ import com.nicholas.citysim.model.GameData;
 * File: MainActivity.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 10/10/2020
+* Modified: 30/10/2020
 * Purpose: Main activity, shows the title screen of game
  -------------------------------------------------------------*/
 
 public class MainActivity extends AppCompatActivity {
-    private Button play, settings;
+    private Button play, settings, cont;
     GameData gData;
 
     @Override
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
             gData.getSettings().setMapWidth(data.getInt("WIDTH"));
             gData.getSettings().setMapHeight(data.getInt("HEIGHT"));
             gData.getSettings().setInitalMoney(data.getInt("MONEY"));
+            gData.setGameTime(0);
 
             gData.updateSettings(gData);
         }
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         play = findViewById(R.id.playButt);
         settings = findViewById(R.id.settingsButt);
+        cont = findViewById(R.id.continueButt);
 
         //Start the Settings activity
         settings.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +60,21 @@ public class MainActivity extends AppCompatActivity {
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = GameActivity.getIntent(MainActivity.this,
+                        gData.getSettings().getMapWidth(),
+                        gData.getSettings().getMapHeight(),
+                        gData.getSettings().getInitalMoney());
+                gData.reset();
+                gData.clearDB();
+                startActivity(intent);
+            }
+        });
+
+        //Start the Game activity
+        cont.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gData = GameData.getInstance();
                 Intent intent = GameActivity.getIntent(MainActivity.this,
                         gData.getSettings().getMapWidth(),
                         gData.getSettings().getMapHeight(),

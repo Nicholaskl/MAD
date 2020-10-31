@@ -80,7 +80,12 @@ public class MapFragment extends Fragment {
             imageView.setImageResource(0);
              }
             else {
-                imageView.setImageResource(ele.getStructure().getImageId());
+                if(ele.getImage() == null) {
+                    imageView.setImageResource(ele.getStructure().getImageId());
+                }
+                else {
+                    imageView.setImageBitmap(ele.getImage());
+                }
 
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -89,10 +94,10 @@ public class MapFragment extends Fragment {
                         Structure curr = ((GameActivity)getActivity()).getCurrStruct();
                         MapElement currMapEle = gData.getMap()[rowFromIndex(index)][colFromIndex(index)];
 
-                        if(currMapEle.getStructure() != null &&
+                        if(currMapEle.getStructure() != null && //This if statement is for demolishing
                                 curr != null &&
                                 curr.getType() == Structure.Type.DEMOLISH &&
-                                currMapEle.getStructure().getImageId() > 0)
+                                currMapEle.getStructure().getImageId() != 0)
                         {
                             imageView.setImageResource(0);
                             currMapEle.setStructure(new Structure());
@@ -103,23 +108,37 @@ public class MapFragment extends Fragment {
                                 curr != null &&
                                 currMapEle.getStructure().getImageId() == 0 &&
                                 curr.getType() != Structure.Type.DEMOLISH &&
-                                ((curr.getOrdinal() > 0 && onRoad(index)) || curr.getOrdinal() == 0))
+                                (curr.getType() == Structure.Type.ROAD || onRoad(index)))
                         {
                             imageView.setImageResource(curr.getImageId());
                             currMapEle.setStructure(curr);
 
-                            Boolean win = gData.setMoney(
+                            gData.setMoney(
                                     gData.getMoney() -
-                                    gData.getSettings().getCost(curr.getOrdinal()));
+                                    gData.getSettings().getCost(curr.getOrdinal())
+                            );
 
                             if(curr.getType() != Structure.Type.ROAD) {
                                 gData.setBuldingNum(curr.getType());
                             }
 
-                            if(!win) { ((GameActivity) getActivity()).refreshInfo(); }
+                            if(gData.getGameOver() != 1) { ((GameActivity) getActivity()).refreshInfo(); }
                             else { ((GameActivity) getActivity()).gameOver(); }
 
                             gData.addMapElement(currMapEle, index); //add to the database
+                            gData.updateSettings(gData);
+                        }
+                        else if(currMapEle.getStructure() != null &&
+                                curr != null &&
+                                currMapEle.getStructure().getImageId() != 0 &&
+                                curr.getType() == Structure.Type.INFO)
+                        {
+                            ((GameActivity) getActivity()).startDetails(
+                                    rowFromIndex(index),
+                                    colFromIndex(index),
+                                    currMapEle.getStructure().typeExport(),
+                                    currMapEle.getStructure().getName()
+                            );
                         }
                     }
                 });
@@ -165,7 +184,7 @@ public class MapFragment extends Fragment {
         tmp[3] = map[rowFromIndex(index)][Math.max(colFromIndex(index) - 1, 0)].getStructure();
 
         for(int i = 0; i < 4; i++) {
-            if(tmp[i].hasType() && tmp[i].getOrdinal() == 0) { onRoad = true; }
+            if(tmp[i].hasType() && tmp[i].getType() == Structure.Type.ROAD) { onRoad = true; }
         }
         return onRoad;
     }
