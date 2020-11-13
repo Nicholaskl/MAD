@@ -8,14 +8,14 @@ import java.util.List;
 * File: StructureData.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 30/10/2020
+* Modified: 8/11//2020
 * Purpose: Model class for StructureData
  -------------------------------------------------------------*/
 
 public class StructureData {
-
     private StructureData instance = null;
 
+    //Array of all te structures
     private List<Structure> structures = Arrays.asList(
             new Structure(R.drawable.ic_building1, Structure.Type.RESIDENTIAL),
             new Structure(R.drawable.ic_building2, Structure.Type.RESIDENTIAL),
@@ -52,6 +52,7 @@ public class StructureData {
         return instance;
     }
 
+    //returns the list of structures
     public List<Structure> getStructures() {
         return structures;
     }

@@ -3,13 +3,14 @@ package com.nicholas.citysim.model;
 * File: Settings.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 18/10/2020
+* Modified: 13/11/2020
 * Purpose: Model class for Settings
  -------------------------------------------------------------*/
 
+import java.util.Set;
+
 public class Settings {
     private static Settings instance = null;
-
     private int mapWidth;
     private int mapHeight;
     private int initalMoney;
@@ -22,6 +23,10 @@ public class Settings {
     private int commBuildingCost;
     private int roadBuildingCost;
 
+
+    /* Submodule: Settings
+     * Assertion: Default constructor for a settings object
+     */
     protected Settings() {
         mapWidth = 50;
         mapHeight = 10;
@@ -43,88 +48,8 @@ public class Settings {
         return instance;
     }
 
-    public int getMapWidth() {
-        return mapWidth;
-    }
-
-    public void setMapWidth(int mapWidth) {
-        this.mapWidth = mapWidth;
-    }
-
-    public int getMapHeight() {
-        return mapHeight;
-    }
-
-    public void setMapHeight(int mapHeight) {
-        this.mapHeight = mapHeight;
-    }
-
-    public int getInitalMoney() {
-        return initalMoney;
-    }
-
-    public void setInitalMoney(int initalMoney) {
-        this.initalMoney = initalMoney;
-    }
-
-    public int getFamilySize() {
-        return familySize;
-    }
-
-    public void setFamilySize(int familySize) {
-        this.familySize = familySize;
-    }
-
-    public int getShopSize() {
-        return shopSize;
-    }
-
-    public void setShopSize(int shopSize) {
-        this.shopSize = shopSize;
-    }
-
-    public int getSalary() {
-        return salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
-
-    public double getTaxRate() {
-        return taxRate;
-    }
-
-    public void setTaxRate(double taxRate) {
-        this.taxRate = taxRate;
-    }
-
-    public int getServiceCost() {
-        return serviceCost;
-    }
-
-    public void setServiceCost(int serviceCost) {
-        this.serviceCost = serviceCost;
-    }
-
-    public int getHouseBuildingCost() {
-        return houseBuildingCost;
-    }
-
-    public void setHouseBuildingCost(int houseBuildingCost) {
-        this.houseBuildingCost = houseBuildingCost;
-    }
-
-    public int getCommBuildingCost() {
-        return commBuildingCost;
-    }
-
-    public void setCommBuildingCost(int commBuildingCost) {
-        this.commBuildingCost = commBuildingCost;
-    }
-
-    public int getRoadBuildingCost() {
-        return roadBuildingCost;
+    public void reset() {
+        instance = new Settings();
     }
 
     /* Submodule: getCost
@@ -141,7 +66,57 @@ public class Settings {
         return export;
     }
 
-    public void setRoadBuildingCost(int roadBuildingCost) {
-        this.roadBuildingCost = roadBuildingCost;
+    public int typeCost(Structure.Type type) {
+        int export = 0;
+        if(type == Structure.Type.RESIDENTIAL) { export = houseBuildingCost; }
+        else { export = commBuildingCost; }
+
+        return export;
+    }
+
+    //Getters
+    public int getMapWidth() {
+        return mapWidth;
+    }
+    public int getMapHeight() {
+        return mapHeight;
+    }
+    public int getInitalMoney() {
+        return initalMoney;
+    }
+    public int getFamilySize() {
+        return familySize;
+    }
+    public int getShopSize() {
+        return shopSize;
+    }
+    public int getSalary() {
+        return salary;
+    }
+    public double getTaxRate() {
+        return taxRate;
+    }
+    public int getServiceCost() {
+        return serviceCost;
+    }
+    public int getHouseBuildingCost() {
+        return houseBuildingCost;
+    }
+    public int getCommBuildingCost() {
+        return commBuildingCost;
+    }
+    public int getRoadBuildingCost() {
+        return roadBuildingCost;
+    }
+
+    //Setters
+    public void setMapWidth(int mapWidth) {
+        this.mapWidth = mapWidth;
+    }
+    public void setMapHeight(int mapHeight) {
+        this.mapHeight = mapHeight;
+    }
+    public void setInitalMoney(int initalMoney) {
+        this.initalMoney = initalMoney;
     }
 }

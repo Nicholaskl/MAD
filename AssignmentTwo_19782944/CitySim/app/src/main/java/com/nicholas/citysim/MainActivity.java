@@ -12,7 +12,7 @@ import com.nicholas.citysim.model.GameData;
 * File: MainActivity.java
 * Author: Nicholas Klvana-Hooper
 * Created: 8/10/2020
-* Modified: 30/10/2020
+* Modified: 13/11/2020
 * Purpose: Main activity, shows the title screen of game
  -------------------------------------------------------------*/
 
@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         //If have come from the settings page, update the game data
         Bundle data = getIntent().getExtras();
         if(data != null) {
+            gData.reset();
+            gData.clearDB();
             gData.getSettings().setMapWidth(data.getInt("WIDTH"));
             gData.getSettings().setMapHeight(data.getInt("HEIGHT"));
             gData.getSettings().setInitalMoney(data.getInt("MONEY"));
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         gData.getSettings().getInitalMoney());
                 gData.reset();
                 gData.clearDB();
+                gData.getSettings().reset();
                 startActivity(intent);
             }
         });

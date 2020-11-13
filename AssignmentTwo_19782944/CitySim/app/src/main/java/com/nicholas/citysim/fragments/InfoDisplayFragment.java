@@ -17,8 +17,9 @@ import com.nicholas.citysim.model.GameData;
 * File: InfoDisplay.java
 * Author: Nicholas Klvana-Hooper
 * Created: 16/10/2020
-* Modified: 18/10/2020
-* Purpose: Info fragment for the game
+* Modified: 13/11/2020
+* Purpose: Info fragment for the game, located at top of main game screen
+*          Contains functions to display game data to the user
  -------------------------------------------------------------*/
 
 public class InfoDisplayFragment extends Fragment {
@@ -32,8 +33,10 @@ public class InfoDisplayFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_info_display, container, false);
 
+        //Get the instance of gamedata for this fragment to display
         gData = GameData.getInstance();
 
+        //Set all of the views
         timeStep = view.findViewById(R.id.timeStep);
         gameTime = view.findViewById(R.id.gameTime);
         money = view.findViewById(R.id.currMoney);
@@ -42,8 +45,10 @@ public class InfoDisplayFragment extends Fragment {
         temp = view.findViewById(R.id.temperature);
         gameOverText = view.findViewById(R.id.gameOverText);
 
+        //Refreshes the fragment to display new values for the game (or set for the first time)
         refresh();
 
+        //Button listener for the timestep button
         timeStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,48 +64,44 @@ public class InfoDisplayFragment extends Fragment {
      * ASSERTION: Runs all the logic to do with a time step
      */
     public void timeStep() {
-        gData.setGameTime(gData.getGameTime() + 1);
-        gData.setPopulation();
-        gData.setEmpRate(Math.min(1,
-                gData.getnCommercial() * gData.getSettings().getShopSize() / (double)gData.getPopulation()));
+        gData.setGameTime(gData.getGameTime() + 1); //increase gametime by 1
+        gData.setPopulation(); //The gamedata class has its own reset population. call it
+        gData.setEmpRate(); //The gamedata class has its own set employment rate function. call it
+        gData.setIncome(); //The gamedata class has its own set income function. call it
 
-        int incomeNum = (int)(gData.getPopulation() * (
-                gData.getEmpRate() *
-                        gData.getSettings().getSalary() *
-                        gData.getSettings().getTaxRate() -
-                        gData.getSettings().getServiceCost())
-        );
-
-        gData.setIncome(incomeNum);
-
+        //Set Total money only if population is above 0
         if(gData.getPopulation() > 0) {
-            gData.setPopulation();
-            gData.setMoney(gData.getMoney() + incomeNum);
+            gData.setMoney(gData.getMoney() + gData.getIncome());
         }
 
-        new GameActivity.DownloadWeather((GameActivity)getActivity()).execute();
-        gData.updateSettings(gData);
+        new GameActivity.DownloadWeather((GameActivity)getActivity()).execute(); //Calculate the weather
+        /* Database gets updated after weather is downloaded
+        *  Can find this in the setWeather function in GameActivity */
     }
 
     /* SUBMODULE: refresh
      * ASSERTION: Resets the text to its current values
      */
     @SuppressLint("SetTextI18n")
-    public void refresh() {
+    public void refresh()
+    {
+        //Set the text for all of the fields in the game for this fragment
         gameTime.setText("Curr time: " + gData.getGameTime() + "yr");
         money.setText("$" + gData.getMoney() + " +" + gData.getIncome());
-
-        gData.setPopulation();
         population.setText("Population: " + gData.getPopulation());
+        employment.setText("Employ Rate: " + gData.getEmpRate() * 100.0 + "%");
+        temp.setText(String.format("%.2f", gData.getWeather()) + "ºC");
 
-        gData.setEmpRate(Math.min(1,
-                gData.getnCommercial() * gData.getSettings().getShopSize() / (double)gData.getPopulation()));
-        employment.setText("Employ Rate: " + gData.getEmpRate()*100.0 + "%");
-        new GameActivity.DownloadWeather((GameActivity)getActivity()).execute();
-
+        //Display game over if the game is over
+        // this is only separated so GameActivity can call it as well
         if(gData.getGameOver() == 1) { gameOver(); }
+        gData.removeSettings();
+        gData.addSettings(gData);
     }
 
+    /* SUBMODULE: gameOver
+     * ASSERTION: displays game over in this fragment
+     */
     public void gameOver() {
         gameOverText.setText("Game Over!");
     }

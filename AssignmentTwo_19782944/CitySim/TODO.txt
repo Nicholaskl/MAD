@@ -1,7 +1,8 @@
  Database new values - ie. money
 
- SINGLETONSS NICK!!!
- Game over persistent??
- picture stuff
+Weather update only on timestep...  put in database?
+Some persistence issues.... with gamedata....
+Clean up code and comment
+Random grass
 
  Clean up code - use enum not ordinals!
