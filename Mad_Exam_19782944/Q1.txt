@@ -1,0 +1,58 @@
+** a.
+
+Explicit intent: This sort of intent includes specifics about the application/activity that should be satisfying the intent. This usually means its more secure as only one particular application will be allowed to respond to it.
+
+An example of an explicit intent would be one that you tell the gameActivity to start from the second assignment. You're on a front page activity, and you explicitly tell the program that you want the gameActivity to start.
+
+Implicit intent: This intent does not include application/activity specifics, instead the data inside the intent specifies a general idea of what should be performed allowing another application to fulfill the request. This is done through filters in which the implicit intent is compared against to govern what application should be used.
+
+An example of an implicit intent could be an intent for displaying a webpage. The url would be automatically opened without having to tell android what activity to run.
+
+
+** b.
+
+One way you could do this, is by creating an intent for Activity B, using getId() to put the id of the student_A object as an extra on the intent and doing the same for the name. On Activity B's side it would then getInt() and getString() on the id and name respectively. In this way the object is split into its data fields and then after the student_A object is reconstructed using the data passed to Activity B.
+
+Another way that could be used is bundling up the data inside of the intent that is used to call Activity B. On creation, activity B takes the intent and takes the data of the intent. So this is very much the same as the other way. However, you can make the Student class parceable by adding the required methods inside of the class code. In doing this instead of passing seperate data you send a "parceable" which is the Student object. In Activity B instead of getInt() its just getParceable() and you just make that a Student object. 
+
+
+** c.
+
+Two cases in which android destroys and rests the activity are:
+	When the device is rotated.
+	When the application is closed.
+
+In order to save the Club object, you can do it as a parceable by implementing the required methods inside of the Club class AS well as the Student Class! Now you can create a method like the one below in which you just put the parceable object of club into the bundle. The CLUB here is a constant string that is just the name of the variable, which could be equal to "CLUB" which allows android to know which data to be pulling from the bundle.
+
+@Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable(CLUB, club);
+    }
+
+
+ Now inside of the onCreate method for the activity you have to check whether the outstate has any data indicating that it had a previous save. If the state is not null, then grab the savedInstance state from the onCreate method and put it back into the variable.
+
+ if (savedInstanceState != null) {
+            club = savedInstanceState.getParcelable(CLUB);
+        }
+
+
+You can do this without using parceable's however it is a little more annoying as you have to save all the students as their raw data values and then recreate the list as well as also get the club name. Much more work that making the club and student parceable.
+
+
+** d.
+
+findViewById() when it is used inside of activites, can be called just as "findViewById()". 
+
+However, inside of fragments this is a bit more complex. 
+Inside of the onCreateView of the fragment you have to inflate a view usually such as:
+View view = inflater.inflate(R.layout.fragment, container, false);
+
+Now, whenever you have to find a view inside of the fragment you do: view.findViewById() instead.
+
+
+** e.
+
+A "view group" is generally considered as an object that contains other views. More specifically a view group is a view, that has other views nested inside of it.
